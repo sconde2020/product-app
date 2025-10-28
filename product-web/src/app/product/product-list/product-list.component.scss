@@ -1,0 +1,145 @@
+:host ::ng-deep {
+  .p-datatable {
+    .p-datatable-thead > tr > th {
+      background-color: #f8f9fa;
+      color: #495057;
+      font-weight: 600;
+      border: 1px solid #dee2e6;
+      padding: 1rem 0.5rem;
+      text-align: center;
+    }
+
+    .p-datatable-tbody > tr {
+      transition: background-color 0.2s;
+
+      &:nth-child(even) {
+        background-color: #f8f9fa;
+      }
+
+      &:nth-child(odd) {
+        background-color: lightgray;
+      }
+
+      &:hover {
+        background-color: #e9ecef;
+      }
+
+      > td {
+        border: 1px solid #dee2e6;
+        padding: 0.75rem 0.5rem;
+        text-align: center;
+      }
+    }
+
+    .p-paginator {
+      background-color: #f8f9fa;
+      border: 1px solid #dee2e6;
+      border-top: none;
+      padding: 0.75rem;
+
+      .p-paginator-current {
+        color: #6c757d;
+        font-size: 0.875rem;
+      }
+
+      .p-paginator-page {
+        min-width: 2.5rem;
+        height: 2.5rem;
+
+        &.p-highlight {
+          background-color: #007bff;
+          border-color: #007bff;
+          color: #ffffff;
+        }
+      }
+    }
+  }
+
+  .table-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+
+    h3 {
+      margin: 0;
+      font-weight: 700;
+      text-align: center;
+    }
+  }
+
+  .action-buttons {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+
+    .p-button {
+      margin: 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      &.p-button-sm {
+        padding: 0.5rem 1rem;
+        font-size: 0.875rem;
+      }
+
+      &.p-button-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+
+        &:hover {
+          background-color: #0056b3;
+          border-color: #004085;
+        }
+      }
+
+      &.p-button-danger {
+        background-color: #dc3545;
+        border-color: #dc3545;
+
+        &:hover {
+          background-color: #c82333;
+          border-color: #bd2130;
+        }
+      }
+
+      .pi {
+        font-size: 0.875rem;
+      }
+    }
+  }
+
+  .empty-message {
+    text-align: center;
+    color: #6c757d;
+    font-style: italic;
+    padding: 2rem;
+  }
+
+  // Responsive design
+  @media (max-width: 768px) {
+    .p-datatable {
+      .p-datatable-thead > tr > th,
+      .p-datatable-tbody > tr > td {
+        padding: 0.5rem 0.25rem;
+        font-size: 0.875rem;
+        text-align: center;
+      }
+
+      .action-buttons {
+        flex-direction: column;
+        gap: 0.25rem;
+
+        .p-button {
+          width: 100%;
+          justify-content: center;
+        }
+      }
+    }
+  }
+}
