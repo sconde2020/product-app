@@ -1,17 +1,20 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { CardModule } from 'primeng/card';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { Router } from '@angular/router';
 import { Product } from '../model/product.model';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { ProductService } from '../shared/product.service';
  
 
 @Component({
   selector: 'app-product-list',
   imports: [
     CommonModule,
+    CardModule,
     FormsModule,
     TableModule,
     ButtonModule,
@@ -19,54 +22,40 @@ import { ActivatedRoute } from '@angular/router';
   templateUrl: './product-list.component.html',
   styleUrl: './product-list.component.scss'
 })
-export class ProductListComponent {
+export class ProductListComponent implements OnInit {
   totalRecords: number = 0;
   first: number = 0;
   rows: number = 10;
-
-  products: Product[] = [
-    { id: 1, name: 'Laptop Pro', price: 1499.99, quantity: 5 },
-    { id: 2, name: 'Wireless Mouse', price: 29.99, quantity: 150 },
-    { id: 3, name: 'Mechanical Keyboard', price: 99.99 }, // quantity omitted
-    { id: 4, name: 'USB-C Hub', price: 49.99, quantity: 25 },
-    { id: 5, name: 'Laptop Pro', price: 1499.99, quantity: 5 },
-    { id: 6, name: 'Wireless Mouse', price: 29.99, quantity: 150 },
-    { id: 7, name: 'Mechanical Keyboard', price: 99.99 }, // quantity omitted
-    { id: 8, name: 'USB-C Hub', price: 49.99, quantity: 25 },
-    { id: 9, name: 'Laptop Pro', price: 1499.99, quantity: 5 },
-    { id: 10, name: 'Wireless Mouse', price: 29.99, quantity: 150 },
-    { id: 11, name: 'Mechanical Keyboard', price: 99.99 }, // quantity omitted
-    { id: 12, name: 'USB-C Hub', price: 49.99, quantity: 25 },
-    { id: 13, name: 'Laptop Pro', price: 1499.99, quantity: 5 },
-    { id: 14, name: 'Wireless Mouse', price: 29.99, quantity: 150 },
-    { id: 15, name: 'Mechanical Keyboard', price: 99.99 }, // quantity omitted
-    { id: 16, name: 'USB-C Hub', price: 49.99, quantity: 25 },
-    { id: 17, name: 'Laptop Pro', price: 1499.99, quantity: 5 },
-    { id: 18, name: 'Wireless Mouse', price: 29.99, quantity: 150 },
-    { id: 19, name: 'Mechanical Keyboard', price: 99.99 }, // quantity omitted
-    { id: 20, name: 'USB-C Hub', price: 49.99, quantity: 25 },
-    { id: 21, name: 'Laptop Pro', price: 1499.99, quantity: 5 },
-    { id: 22, name: 'Wireless Mouse', price: 29.99, quantity: 150 },
-    { id: 23, name: 'Mechanical Keyboard', price: 99.99 }, // quantity omitted
-    { id: 24, name: 'USB-C Hub', price: 49.99, quantity: 25 },
-  ];
+  products: Product[] = [];
 
   constructor(
+    private productService: ProductService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
   ) {}
 
 
-  createNewProduct() {
-    this.router.navigate(['new'], { relativeTo: this.route });
- }
-
-  viewDetails(id: number): void {
-    this.router.navigate(['details', id], { relativeTo: this.route });
+  ngOnInit() {
+    this.productService.getAllProducts().subscribe(products => {
+      this.products = products;
+      this.totalRecords = products.length;
+    });
   }
 
-  deleteProduct(product: Product): void {
-    this.products = this.products.filter(p => p.id !== product.id);
+  viewDetails(productId: number): void {
+    this.router.navigate(['details', productId], { relativeTo: this.route });
+  }
+
+  createNewProduct() {
+    this.router.navigate(['new'], { relativeTo: this.route });
+  }
+
+  updateProduct(productId: number) {
+    this.router.navigate(['update', productId], { relativeTo: this.route });
+  }
+
+  deleteProduct(productId: number): void {
+    this.products = this.products.filter(p => p.id !== productId);
     this.totalRecords = this.products.length;
   }
   

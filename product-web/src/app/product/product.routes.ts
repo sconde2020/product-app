@@ -5,6 +5,7 @@ import { Routes } from '@angular/router';
 
 export const PRODUCT_ROUTES: Routes = [
   { path: '', component: ProductListComponent },
-  { path: 'new', component: ProductNewComponent },
   { path: 'details/:id', component: ProductDetailComponent },
+  { path: 'new', component: ProductNewComponent },
+  { path: 'update/:id', component: ProductNewComponent },
 ];

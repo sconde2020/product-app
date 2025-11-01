@@ -1,60 +1,84 @@
-<p-table
-  [value]="products"
-  [paginator]="true"
-  [rows]="10"
-  [rowsPerPageOptions]="[5, 10, 20, 50]"
-  [totalRecords]="totalRecords"
-  [sortMode]="'single'"
-  [tableStyle]="{ 'min-width': '60rem' }"
->
-  <ng-template pTemplate="caption">
-    <div class="table-header">
-      <h3>Product List</h3>     
-    </div>
-  </ng-template>
-
-  <ng-template pTemplate="header">
-    <tr>
-      <th pSortableColumn="name" style="width: 200px;">Name <p-sortIcon field="name"></p-sortIcon></th>
-      <th pSortableColumn="price" style="width: 120px;">Price <p-sortIcon field="price"></p-sortIcon></th>
-      <th pSortableColumn="quantity" style="width: 120px;">Quantity <p-sortIcon field="quantity"></p-sortIcon></th>
-      <th style="width: 250px;">Actions</th>
-    </tr>
-  </ng-template>
-
-  <ng-template pTemplate="body" let-product>
-    <tr>
-      <td>{{ product.name }}</td>
-      <td>{{ product.price | currency }}</td>
-      <td>{{ product.quantity }}</td>
-      <td>
-        <div class="action-buttons">
-          <button 
-            pButton 
-            type="button" 
-            icon="pi pi-eye" 
-            label="View details" 
-            class="p-button-primary p-button-sm"
-            (click)="viewDetails(product.id)">
-          </button>
-
-          <button 
-            pButton 
-            type="button" 
-            icon="pi pi-trash" 
-            label="Delete" 
-            class="p-button-danger p-button-sm"
-            (click)="deleteProduct(product)">
-          </button>
+<div class="product-table-container">
+  <p-card class="product-card">
+     <ng-template pTemplate="header">
+      <div class="product-list-header">
+        <h2>Our Products</h2>
+        <div class="new-button">
+          <button
+            pButton
+            type="button"
+            label="Add New Product"
+            icon="pi pi-plus"
+            class="p-button-success p-button-sm"
+            (click)="createNewProduct()"
+          ></button>
         </div>
-      </td>
-    </tr>
-  </ng-template>
+      </div>
+    </ng-template>
 
-  <ng-template pTemplate="emptymessage">
-    <tr>
-      <td colspan="5" class="empty-message">No products found.</td>
-    </tr>
-  </ng-template>
+    <p-table
+      [value]="products"
+      [paginator]="true"
+      [rows]="10"
+      [rowsPerPageOptions]="[5, 10, 20, 50]"
+      [totalRecords]="totalRecords"
+      [sortMode]="'single'"
+      [tableStyle]="{ 'min-width': '60rem' }"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th pSortableColumn="name" style="width: 200px;">
+            Name <p-sortIcon field="name"></p-sortIcon>
+          </th>
+          <th pSortableColumn="price" style="width: 120px;">
+            Price <p-sortIcon field="price"></p-sortIcon>
+          </th>
+          <th style="width: 250px;">Actions</th>
+        </tr>
+      </ng-template>
 
-</p-table>
+      <ng-template pTemplate="body" let-product>
+        <tr>
+          <td>{{ product.name }}</td>
+          <td>{{ product.price | currency }}</td>
+          <td>
+            <div class="action-buttons">
+              <button
+                pButton
+                type="button"
+                icon="pi pi-eye"
+                label="View"
+                class="p-button-primary p-button-sm"
+                (click)="viewDetails(product.id)"
+              ></button>
+
+              <button
+                pButton
+                type="button"
+                icon="pi pi-pencil"
+                label="Edit"
+                class="p-button-success p-button-sm"
+                (click)="updateProduct(product.id)"
+              ></button>
+
+              <button
+                pButton
+                type="button"
+                icon="pi pi-trash"
+                label="Delete"
+                class="p-button-danger p-button-sm"
+                (click)="deleteProduct(product.id)"
+              ></button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="3" class="empty-message">No products found.</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-card>
+</div>

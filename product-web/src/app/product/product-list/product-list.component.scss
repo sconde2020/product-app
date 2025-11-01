@@ -1,12 +1,69 @@
 :host ::ng-deep {
+    /* === Card Container === */
+  .product-table-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 2rem;
+  }
+
+  .product-card {
+    width: 60%; /* Use 50–60% for your preferred width */
+    min-width: 50rem; /* ≈ 800px */
+    background: #ffffff;
+    border-radius: 1rem;
+    box-shadow: 0 0.4rem 1rem rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: width 0.3s ease;
+
+    @media (max-width: 64rem) { /* 1024px */
+      width: 80%;
+      min-width: auto;
+    }
+
+    @media (max-width: 48rem) { /* 768px */
+      width: 95%;
+      padding: 1rem;
+    }
+  }
+
+  .product-list-header {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* centers the h2 */
+    position: relative;      /* allows absolute positioning for button */
+    background-color: #007ad9;
+    color: white;
+    padding: 1rem 1.5rem;
+
+    h2 {
+      margin: 0;
+      font-size: 1.5rem;
+      font-weight: 700;
+      text-align: center;
+      flex: 1; /* allows it to expand, keeping button on right */
+    }
+
+    .new-button {
+      position: absolute;
+      right: 1.5rem; /* same as header padding */
+      top: 50%;
+      transform: translateY(-50%); /* vertically center button */
+      font-weight: 700;
+    }
+  }
+
+
+  /* === Table Styling === */
   .p-datatable {
     .p-datatable-thead > tr > th {
       background-color: #f8f9fa;
       color: #495057;
-      font-weight: 600;
-      border: 1px solid #dee2e6;
+      font-weight: 700;
+      border: 0.1rem solid #dee2e6;
       padding: 1rem 0.5rem;
       text-align: center;
+      font-size: 1.2rem;
     }
 
     .p-datatable-tbody > tr {
@@ -17,23 +74,25 @@
       }
 
       &:nth-child(odd) {
-        background-color: lightgray;
+        background-color: #e0e0e0;
       }
 
       &:hover {
-        background-color: #e9ecef;
+        background-color: grey;
       }
 
       > td {
-        border: 1px solid #dee2e6;
+        border: 0.1rem solid #dee2e6;
         padding: 0.75rem 0.5rem;
         text-align: center;
+        font-size: 1rem;
+        font-weight: 700;
       }
     }
 
     .p-paginator {
       background-color: #f8f9fa;
-      border: 1px solid #dee2e6;
+      border: 0.1rem solid #dee2e6;
       border-top: none;
       padding: 0.75rem;
 
@@ -55,39 +114,47 @@
     }
   }
 
+  /* === Table Header (caption) === */
   .table-header {
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 1rem;
     background-color: #f8f9fa;
-    border-bottom: 1px solid #dee2e6;
+    border-bottom: 0.1rem solid #dee2e6;
 
     h3 {
       margin: 0;
       font-weight: 700;
       text-align: center;
+      font-size: 1.5rem;
     }
   }
 
+  /* === Action Buttons === */
   .action-buttons {
     display: flex;
     gap: 0.5rem;
     flex-wrap: wrap;
     justify-content: center;
-    align-items: center;
+    align-items: center;    
+  }
 
+  .action-buttons, .new-button {
     .p-button {
       margin: 0;
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
+      border-radius: 0.5rem;
 
       &.p-button-sm {
         padding: 0.5rem 1rem;
-        font-size: 0.875rem;
+        font-size: 1rem;
+        font-weight: 700;
       }
 
+      /* === Primary Button === */
       &.p-button-primary {
         background-color: #007bff;
         border-color: #007bff;
@@ -98,6 +165,22 @@
         }
       }
 
+      /* === Success Button === */
+      &.p-button-success {
+        background-color: #28a745;
+        border-color: #28a745;
+
+        &:hover {
+          background-color: #218838;
+          border-color: #1e7e34;
+        }
+
+        &:focus {
+          box-shadow: 0 0 0 0.2rem rgba(72, 180, 97, 0.5);
+        }
+      }
+
+      /* === Danger Button === */
       &.p-button-danger {
         background-color: #dc3545;
         border-color: #dc3545;
@@ -114,15 +197,41 @@
     }
   }
 
+  .p-button .pi {
+    font-size: 1rem;
+    margin-right: 0.5rem;
+    display: inline-block;
+    visibility: visible !important;
+  }
+
+  /* === Empty message === */
   .empty-message {
     text-align: center;
     color: #6c757d;
     font-style: italic;
     padding: 2rem;
+    font-size: 1rem;
   }
 
-  // Responsive design
-  @media (max-width: 768px) {
+  /* === Responsive Design === */
+  @media (max-width: 48rem) { /* 768px */
+    .product-list-header {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.5rem;
+
+      h2 {
+        font-size: 1.2rem;
+        text-align: center;
+      }
+
+      .new-button {
+        width: 100%; /* button fills full width on mobile */
+        margin-left: 0;
+        margin-right: 0;
+      }
+    }
+
     .p-datatable {
       .p-datatable-thead > tr > th,
       .p-datatable-tbody > tr > td {

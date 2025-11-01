@@ -1,0 +1,56 @@
+.product-card {
+  width: 90%;                /* responsive width */
+  max-width: 40rem;          /* readable limit on large screens */
+  margin: 2rem auto;         /* center with vertical spacing */
+  box-shadow: 0 0.2rem 0.8rem rgba(0, 0, 0, 0.1);
+  border-radius: 1rem;
+  overflow: hidden;
+  font-size: 1rem;           /* base scaling for text */
+}
+
+.product-header {
+  background-color: #007ad9;
+  color: white;
+  padding: 1rem 1.5rem;
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.product-content {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+
+  /* Center the content block horizontally */
+  align-items: center;
+}
+
+.product-content p {
+  margin: 0;
+  line-height: 1.4;
+  font-size: 1rem;
+
+  /* Left-align the text inside the block */
+  text-align: left;
+  width: 100%; /* ensures left alignment works */
+  max-width: 30rem; /* optional, keeps text from stretching too wide */
+}
+
+
+@media (max-width: 768px) {
+  .product-card {
+    width: 95%;
+    font-size: 0.95rem;
+  }
+
+  .product-header {
+    font-size: 1rem;
+    padding: 0.8rem;
+  }
+
+  .product-content {
+    padding: 1rem;
+  }
+}
