@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 import { Product } from '../model/product.model';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { ProductService } from '../shared/product.service';
+import { ProductService } from '../services/product.service';
  
 
 @Component({

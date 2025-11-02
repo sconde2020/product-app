@@ -1,7 +1,8 @@
-<div class="product-table-container">
+<div class="product-card-container">
   <p-card class="product-card">
-     <ng-template pTemplate="header">
-      <div class="product-list-header">
+     
+    <ng-template pTemplate="header">
+      <div class="product-card-header">
         <h2>Our Products</h2>
         <div class="new-button">
           <button
@@ -30,6 +31,9 @@
           <th pSortableColumn="name" style="width: 200px;">
             Name <p-sortIcon field="name"></p-sortIcon>
           </th>
+          <th pSortableColumn="category" style="width: 200px;">
+            Category <p-sortIcon field="category"></p-sortIcon>
+          </th>
           <th pSortableColumn="price" style="width: 120px;">
             Price <p-sortIcon field="price"></p-sortIcon>
           </th>
@@ -40,6 +44,7 @@
       <ng-template pTemplate="body" let-product>
         <tr>
           <td>{{ product.name }}</td>
+          <td>{{ product.category }}</td>
           <td>{{ product.price | currency }}</td>
           <td>
             <div class="action-buttons">

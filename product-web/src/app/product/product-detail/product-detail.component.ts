@@ -3,14 +3,16 @@ import { CommonModule } from '@angular/common';
 import { CardModule } from 'primeng/card';
 import { MessageModule } from 'primeng/message';
 import { Product } from '../model/product.model';
-import { ActivatedRoute } from '@angular/router';
-import { ProductService } from '../shared/product.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ProductService } from '../services/product.service';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-product-detail',
   imports: [
     CommonModule,
     CardModule,
+    ButtonModule,
     MessageModule
   ],
   templateUrl: './product-detail.component.html',
@@ -20,6 +22,7 @@ export class ProductDetailComponent implements OnInit {
   product: Product | null = null;
 
   constructor(
+    private router: Router,
     private route: ActivatedRoute,
     private productService: ProductService
   ) {}
@@ -32,5 +35,9 @@ export class ProductDetailComponent implements OnInit {
         console.log(this.product);
       });
     }
+  }
+
+  onBackToList(): void {
+    this.router.navigate(['/products']);
   }
 }

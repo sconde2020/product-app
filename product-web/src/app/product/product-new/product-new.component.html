@@ -1,1 +1,88 @@
-<p>product-new works!</p>
+<div class="product-card-container">
+  <p-card class="product-card">
+
+    <ng-template pTemplate="header">
+        <div class="product-card-header">
+            <h2>{{ productToUpdate ? 'Update Product' : 'Create New Product' }}</h2>
+        </div>
+    </ng-template>
+
+    <ng-template pTemplate="content">
+        <div class="product-new-content">
+            <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+                <div class="p-field">
+                    <label for="name">Name</label>
+                    <input 
+                        id="name" 
+                        type="text" 
+                        pInputText 
+                        formControlName="name" 
+                        [value]="productToUpdate?.name || ''" 
+                    />
+                </div>
+
+                <div class="p-field">
+                    <label for="category">Category</label>
+                    <input 
+                        id="category" 
+                        type="text" 
+                        pInputText 
+                        formControlName="category" 
+                        [value]="productToUpdate?.category || ''" 
+                    />
+                </div>
+
+                <div class="p-field">
+                    <label for="price">Price</label>
+                    <input 
+                        id="price" 
+                        type="number" 
+                        pInputText 
+                        formControlName="price" 
+                        [value]="productToUpdate?.price ?? ''" 
+                    />
+                </div>
+
+                <div class="p-field">
+                    <label for="quantity">Quantity</label>
+                    <input 
+                        id="quantity" 
+                        type="number" 
+                        pInputText 
+                        formControlName="quantity" 
+                        [value]="productToUpdate?.quantity ?? ''" 
+                    />
+                </div>
+
+                <div class="p-field">
+                    <label for="description">Description</label>
+                    <textarea 
+                        id="description" 
+                        pInputTextarea 
+                        formControlName="description"
+                    >{{ productToUpdate?.description || '' }}</textarea>
+                </div>
+
+                <div class="form-buttons">
+                    <button 
+                        type="button" 
+                        pButton 
+                        label="Cancel" 
+                        class="p-button-primary p-button-sm"
+                        (click)="onCancel()"
+                    ></button>
+
+                    <button 
+                        type="submit" 
+                        pButton 
+                        label="Validate"
+                        [disabled]="productForm.invalid"
+                        class="p-button-success p-button-sm"
+                    ></button>
+                </div>
+            </form>
+        </div>
+    </ng-template>
+    
+  </p-card>
+</div>

@@ -1,58 +1,4 @@
 :host ::ng-deep {
-    /* === Card Container === */
-  .product-table-container {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    padding: 2rem;
-  }
-
-  .product-card {
-    width: 60%; /* Use 50–60% for your preferred width */
-    min-width: 50rem; /* ≈ 800px */
-    background: #ffffff;
-    border-radius: 1rem;
-    box-shadow: 0 0.4rem 1rem rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-    transition: width 0.3s ease;
-
-    @media (max-width: 64rem) { /* 1024px */
-      width: 80%;
-      min-width: auto;
-    }
-
-    @media (max-width: 48rem) { /* 768px */
-      width: 95%;
-      padding: 1rem;
-    }
-  }
-
-  .product-list-header {
-    display: flex;
-    align-items: center;
-    justify-content: center; /* centers the h2 */
-    position: relative;      /* allows absolute positioning for button */
-    background-color: #007ad9;
-    color: white;
-    padding: 1rem 1.5rem;
-
-    h2 {
-      margin: 0;
-      font-size: 1.5rem;
-      font-weight: 700;
-      text-align: center;
-      flex: 1; /* allows it to expand, keeping button on right */
-    }
-
-    .new-button {
-      position: absolute;
-      right: 1.5rem; /* same as header padding */
-      top: 50%;
-      transform: translateY(-50%); /* vertically center button */
-      font-weight: 700;
-    }
-  }
-
 
   /* === Table Styling === */
   .p-datatable {
@@ -190,18 +136,7 @@
           border-color: #bd2130;
         }
       }
-
-      .pi {
-        font-size: 0.875rem;
-      }
     }
-  }
-
-  .p-button .pi {
-    font-size: 1rem;
-    margin-right: 0.5rem;
-    display: inline-block;
-    visibility: visible !important;
   }
 
   /* === Empty message === */

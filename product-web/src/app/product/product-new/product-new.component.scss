@@ -1,0 +1,124 @@
+
+/* === Content === */
+.product-new-content {
+  padding: 2rem 1.5rem;
+  display: flex;
+  justify-content: center;
+
+  form {
+    width: 100%;
+    max-width: 30rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+
+    .p-field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+
+      label {
+        font-weight: 600;
+        color: #495057;
+        font-size: 1rem;
+      }
+
+      input,
+      textarea {
+        width: 100%;
+        font-size: 1rem;
+        font-weight: 600;
+        line-height: 1.5;
+        padding: 0.5rem;
+        border: 1px solid #ced4da;
+        border-radius: 0.4rem;
+        transition: border-color 0.2s ease;
+      }
+
+      textarea {
+        resize: vertical;
+        min-height: 8rem;
+      }
+    }
+
+    .form-buttons {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+
+      button[pButton] {
+      align-self: center;
+      margin-top: 1rem;
+      font-weight: 700;
+      border-radius: 0.5rem;
+      padding: 0.6rem 1.5rem;
+      font-size: 1rem;
+      transition: background-color 0.2s ease, box-shadow 0.2s ease;
+
+      &.p-button-success {
+        background-color: #28a745;
+        border-color: #28a745;
+        color: #fff;
+        padding: 1rem 2rem;
+
+        &:hover {
+          background-color: #218838;
+          border-color: #1e7e34;
+        }
+
+        &:focus {
+          box-shadow: 0 0 0 0.2rem rgba(72, 180, 97, 0.5);
+        }
+
+        &:disabled {
+          background-color: #a8d5b0;
+          border-color: #a8d5b0;
+          cursor: not-allowed;
+        }
+      }
+
+      &.p-button-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+        padding: 1rem 2rem;
+
+        &:hover {
+          background-color: #0056b3;
+          border-color: #004085;
+        }
+
+        &:disabled {
+          background-color: #b0c4de;
+          border-color: #b0c4de;
+          cursor: not-allowed;
+        }
+      }
+    }
+    }
+  }
+}
+
+/* === Responsive === */
+@media (max-width: 48rem) {
+  .product-new-content {
+    padding: 1rem;
+
+    form {
+      gap: 1rem;
+
+      .p-field label {
+        font-size: 0.95rem;
+      }
+
+      input,
+      textarea {
+        font-size: 0.95rem;
+      }
+
+      button[pButton] {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+  }
+}
