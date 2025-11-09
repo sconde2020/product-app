@@ -2,29 +2,37 @@
   @if (product) {
     <p-card class="product-card">
       
-      <ng-template pTemplate="header">
-        <div class="product-card-header">
-          <h2>{{ product.name }}</h2>
-        </div> 
-      </ng-template>
+      @if (apiErrorStatus) {
+        <p-message 
+         severity="error" 
+         text="{{ apiErrorMessage }}" 
+         class="error-message">
+        </p-message>
+      } @else {
+        <ng-template pTemplate="header">
+          <div class="product-card-header">
+            <h2>{{ product.name }}</h2>
+          </div> 
+        </ng-template>
 
-      <ng-template pTemplate="content">
-        <div class="product-content">
-          <p><strong>Category:</strong> {{ product.category }}</p>
-          <p><strong>Name:</strong> {{ product.name }}</p>
-          <p><strong>Price:</strong> ${{ product.price }}</p>
-          <p><strong>Quantity:</strong> {{ product.quantity }}</p>
-          <p><strong>Description:</strong> {{ product.description }}</p>
-          <button 
-              type="submit" 
-              pButton 
-              label='Back to List'
-              class="p-button-primary p-button-sm"
-              (click)="onBackToList()"
-          >
-          </button>
-        </div>
-      </ng-template>
+        <ng-template pTemplate="content">
+          <div class="product-content">
+            <p><strong>Category:</strong> {{ product.category }}</p>
+            <p><strong>Name:</strong> {{ product.name }}</p>
+            <p><strong>Price:</strong> ${{ product.price }}</p>
+            <p><strong>Quantity:</strong> {{ product.quantity }}</p>
+            <p><strong>Description:</strong> {{ product.description }}</p>
+            <button 
+                type="submit" 
+                pButton 
+                label='Back to List'
+                class="p-button-primary p-button-sm"
+                (click)="onBackToList()"
+            >
+            </button>
+          </div>
+        </ng-template>
+      }      
     </p-card>
   }
   @else {

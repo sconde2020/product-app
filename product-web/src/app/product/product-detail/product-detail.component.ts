@@ -6,6 +6,7 @@ import { Product } from '../model/product.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductService } from '../services/product.service';
 import { ButtonModule } from 'primeng/button';
+import { ERROR_MESSAGES } from '../constants/error-message.constants';
 
 @Component({
   selector: 'app-product-detail',
@@ -19,7 +20,9 @@ import { ButtonModule } from 'primeng/button';
   styleUrl: './product-detail.component.scss'
 })
 export class ProductDetailComponent implements OnInit {
-  product: Product | null = null;
+  product!: Product;
+  apiErrorStatus: boolean = false;
+  apiErrorMessage: string = '';
 
   constructor(
     private router: Router,
@@ -30,9 +33,14 @@ export class ProductDetailComponent implements OnInit {
   ngOnInit(): void {
     const productId = this.route.snapshot.paramMap.get('id');
     if (productId) {
-      this.productService.getProductById(+productId).subscribe(product => {
-        this.product = product;
-        console.log(this.product);
+      this.productService.getProductById(+productId).subscribe({
+        next: (data: Product) => {
+          this.product = data;
+        },
+        error: (error) => {
+          this.apiErrorStatus = true;
+          this.apiErrorMessage = error.message || ERROR_MESSAGES.FETCH_PRODUCT_DETAILS;
+        }
       });
     }
   }

@@ -63,6 +63,14 @@
                     >{{ productToUpdate?.description || '' }}</textarea>
                 </div>
 
+                @if (apiErrorStatus) {
+                    <p-message 
+                        severity="error" 
+                        text="{{ apiErrorMessage }}"
+                        class="error-message"
+                    >
+                    </p-message>
+                }
                 <div class="form-buttons">
                     <button 
                         type="button" 

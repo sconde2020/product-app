@@ -8,6 +8,9 @@ import { Product } from '../model/product.model';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { ProductService } from '../services/product.service';
+import { ProductListResponse } from '../model/product-list-response';
+import { MessageModule } from "primeng/message";
+import { ERROR_MESSAGES } from '../constants/error-message.constants';
  
 
 @Component({
@@ -18,7 +21,8 @@ import { ProductService } from '../services/product.service';
     FormsModule,
     TableModule,
     ButtonModule,
-  ],
+    MessageModule
+],
   templateUrl: './product-list.component.html',
   styleUrl: './product-list.component.scss'
 })
@@ -28,6 +32,9 @@ export class ProductListComponent implements OnInit {
   rows: number = 10;
   products!: Product[];
 
+  apiErrorStatus: boolean = false;
+  apiErrorMessage: string = '';
+
   constructor(
     private productService: ProductService,
     private router: Router,
@@ -36,9 +43,15 @@ export class ProductListComponent implements OnInit {
 
 
   ngOnInit() {
-    this.productService.getAllProducts().subscribe((data: Product[]) => {
-      this.products = data;
-      this.totalRecords = data.length;
+    this.productService.getAllProducts().subscribe({
+      next: (response: ProductListResponse) => {
+        this.products = response.content;
+        this.totalRecords = response.page.totalElements || 0;
+      },
+      error: (error) => {
+        this.apiErrorStatus = true;
+        this.apiErrorMessage = error.message || ERROR_MESSAGES.FETCH_PRODUCTS;
+      }
     });
   }
 

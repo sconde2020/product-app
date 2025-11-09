@@ -6,6 +6,8 @@ import { CardModule } from 'primeng/card';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Product } from '../model/product.model';
 import { ButtonModule } from 'primeng/button';
+import { MessageModule } from "primeng/message";
+import { ERROR_MESSAGES } from '../constants/error-message.constants';
 
 @Component({
   selector: 'app-product-new',
@@ -14,19 +16,18 @@ import { ButtonModule } from 'primeng/button';
     CardModule,
     ButtonModule,
     ReactiveFormsModule,
-  ],
+    MessageModule
+],
   templateUrl: './product-new.component.html',
   styleUrls: ['./product-new.component.scss']
 })
-export class ProductNewComponent implements OnInit {
-  
-  productId: number | null = null;
-
+export class ProductNewComponent implements OnInit {  
+  productId!: number | null;
   productToUpdate: Product | null = null;
-
   productForm!: FormGroup;
+  apiErrorStatus: boolean = false;
+  apiErrorMessage: string = '';
 
-  
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -40,11 +41,15 @@ export class ProductNewComponent implements OnInit {
     this.productId = idParam ? +idParam : null;
 
     if (this.productId !== null) {
-      this.productService.getProductById(this.productId).subscribe(product => {
-        this.productToUpdate = product;
-        this.initializeForm();
-        if (this.productToUpdate) {
+      this.productService.getProductById(this.productId).subscribe({
+        next: (product: Product) => {
+          this.productToUpdate = product;
+          this.initializeForm();
           this.productForm.patchValue(this.productToUpdate);
+        },
+        error: (error) => {
+          this.apiErrorStatus = true;
+          this.apiErrorMessage = error.message || ERROR_MESSAGES.FETCH_PRODUCT_DETAILS;
         }
       });
     } else {
@@ -74,13 +79,12 @@ export class ProductNewComponent implements OnInit {
   createProduct(): void {
     if (this.productForm.valid) {
       this.productService.createProduct(this.productForm.value).subscribe({
-        next: (response) => {
-          console.log('Product created successfully:', response);
+        next: () => {
           this.backToList();
         },
         error: (error) => {
-          console.error('Error creating product:', error);
-          this.backToList();
+          this.apiErrorStatus = true;
+          this.apiErrorMessage = error.message || ERROR_MESSAGES.CREATE_PRODUCT;
         }
       });
     }
@@ -89,13 +93,12 @@ export class ProductNewComponent implements OnInit {
   updateProduct(): void {
     if (this.productForm.valid) {
       this.productService.updateProduct(this.productForm.value).subscribe({
-        next: (response) => {
-          console.log('Product updated successfully:', response);
+        next: () => {
           this.backToList();
         },
         error: (error) => {
-          console.error('Error updating product:', error);
-          this.backToList();
+          this.apiErrorStatus = true;
+          this.apiErrorMessage = error.message || ERROR_MESSAGES.UPDATE_PRODUCT;
         }
       });
     }

@@ -19,7 +19,7 @@ body {
   box-shadow: 0 0.4rem 1rem rgba(0, 0, 0, 0.1);
   overflow: hidden;
   transition: width 0.3s ease;
-
+  
   @media (max-width: 64rem) { /* 1024px */
     width: 80%;
     min-width: auto;
@@ -47,4 +47,34 @@ body {
     text-align: center;
     flex: 1; /* allows it to expand, keeping button on right */
   }
+}
+
+/* Style for your custom message */
+.error-message {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  color: red;
+  padding: 1rem 1.5rem;
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 600;
+
+  /* Remove PrimeNG box & background */
+  border: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+/* PrimeNG internal wrapper class (for full control) */
+.error-message .p-message {
+  border: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+/* Optionally hide icon if you want a cleaner look */
+.error-message .p-message-icon {
+  display: none;
 }

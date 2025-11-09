@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
-import { map, Observable } from 'rxjs';
 import { Product } from '../model/product.model';
-import { ApiService } from '../../core/services/api.service';
+import { ApiService } from '../../core/api.service';
 import { ProductListResponse } from '../model/product-list-response';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { ERROR_MESSAGES } from '../constants/error-message.constants';
 
 @Injectable({
   providedIn: 'root'
@@ -13,25 +15,34 @@ export class ProductService {
 
   constructor(private apiService: ApiService) { }
 
-  getProductById(id: number): Observable<Product> {
-    return this.apiService.getById<Product>(this.endpoint, id);
+  private handleError(err: any): Observable<never> {
+    const message = err?.error?.message || err?.message || ERROR_MESSAGES.UNKNOWN_ERROR;
+    return throwError(() => new Error(message));
   }
 
-  getAllProducts(): Observable<Product[]> {
+  getProductById(id: number): Observable<Product> {
+    return this.apiService.getById<Product>(this.endpoint, id)
+      .pipe(catchError(err => this.handleError(err)));
+  }
+
+  getAllProducts(): Observable<ProductListResponse> {
     return this.apiService.getAll<ProductListResponse>(this.endpoint)
-      .pipe(map(response => response.content));
+      .pipe(catchError(err => this.handleError(err)));
   }
 
   createProduct(product: Product): Observable<Product> {
-    return this.apiService.create<Product>(this.endpoint, product);
+    return this.apiService.create<Product>(this.endpoint, product)
+      .pipe(catchError(err => this.handleError(err)));
   }
 
   updateProduct(updatedProduct: Product): Observable<Product> {
-    return this.apiService.update<Product>(this.endpoint, updatedProduct.id, updatedProduct);
+    return this.apiService.update<Product>(this.endpoint, updatedProduct.id, updatedProduct)
+      .pipe(catchError(err => this.handleError(err)));
   }
 
   deleteProduct(id: number): Observable<void> {
-    return this.apiService.delete(this.endpoint, id);
+    return this.apiService.delete(this.endpoint, id)
+      .pipe(catchError(err => this.handleError(err)));
   }
   
 }
