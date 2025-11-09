@@ -6,6 +6,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.AccessLevel;
+import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.http.ResponseEntity;
@@ -15,14 +17,14 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/products")
 @Tag(name = "Products", description = "CRUD operations for products")
 @EnableSpringDataWebSupport(pageSerializationMode = EnableSpringDataWebSupport.PageSerializationMode.VIA_DTO)
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ProductController {
 
-    private final ProductApplicationService service;
+    ProductApplicationService service;
 
     public ProductController(ProductApplicationService service) {
         this.service = service;
     }
-
 
     @Operation(summary = "Create a new product")
     @ApiResponses({

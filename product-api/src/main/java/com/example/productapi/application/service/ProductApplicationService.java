@@ -4,7 +4,10 @@ import com.example.productapi.application.dto.ProductDto;
 import com.example.productapi.application.exception.InvalidProductException;
 import com.example.productapi.application.mapper.ProductMapper;
 import com.example.productapi.domain.exception.ProductNotFoundException;
+import com.example.productapi.domain.model.Product;
 import com.example.productapi.domain.repository.ProductRepository;
+import lombok.AccessLevel;
+import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -12,10 +15,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ProductApplicationService {
 
-    private final ProductRepository repository;
-    private final ProductMapper mapper;
+    ProductRepository repository;
+    ProductMapper mapper;
 
     public ProductApplicationService(ProductRepository repository, ProductMapper mapper) {
         this.repository = repository;
@@ -24,12 +28,12 @@ public class ProductApplicationService {
 
     public ProductDto create(ProductDto dto) {
         validate(dto);
-        var saved = repository.save(mapper.toEntity(dto));
+        Product saved = repository.save(mapper.toEntity(dto));
         return mapper.toDto(saved);
     }
 
     public ProductDto findById(Long id) {
-        var entity = repository.findById(id)
+        Product entity = repository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException(id));
         return mapper.toDto(entity);
     }
@@ -41,12 +45,13 @@ public class ProductApplicationService {
     }
 
     public ProductDto update(Long id, ProductDto dto) {
-        var existing = repository.findById(id)
+        Product existing = repository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException(id));
 
-        existing.setName(dto.name());
-        existing.setPrice(dto.price());
-        var updated = repository.save(existing);
+        Product newProduct = mapper.toEntity(dto);
+        newProduct.setId(existing.getId());
+
+        Product updated = repository.save(newProduct);
 
         return mapper.toDto(updated);
     }
@@ -64,6 +69,15 @@ public class ProductApplicationService {
         }
         if (dto.price() == null || dto.price().doubleValue() <= 0) {
             throw new InvalidProductException("Price must be positive");
+        }
+        if (dto.category() == null || dto.category().isBlank()) {
+            throw new InvalidProductException("Category cannot be empty");
+        }
+        if (dto.description() == null || dto.description().isBlank()) {
+            throw new InvalidProductException("Description cannot be empty");
+        }
+        if (dto.quantity() == null || dto.quantity() <= 0) {
+            throw new InvalidProductException("Quantity must be positive");
         }
     }
 }
