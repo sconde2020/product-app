@@ -1,48 +1,37 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { Product } from '../model/product.model';
-import { MOCK_PRODUCTS } from './product-mock.utils';
+import { ApiService } from '../../core/services/api.service';
+import { ProductListResponse } from '../model/product-list-response';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductService {
+ 
+  private readonly endpoint = 'products';
 
+  constructor(private apiService: ApiService) { }
 
-  private products: Product[] = MOCK_PRODUCTS;
-  
-  constructor() { }
-
-  getProductById(id: number) : Observable<Product | null> {
-    const product = this.products.find(p => p.id === id) || null;
-    return of(product);
+  getProductById(id: number): Observable<Product> {
+    return this.apiService.getById<Product>(this.endpoint, id);
   }
 
   getAllProducts(): Observable<Product[]> {
-    return of(this.products);
+    return this.apiService.getAll<ProductListResponse>(this.endpoint)
+      .pipe(map(response => response.content));
   }
 
   createProduct(product: Product): Observable<Product> {
-    this.products.push(product);
-    return of(product);
+    return this.apiService.create<Product>(this.endpoint, product);
   }
 
-  updateProduct(updatedProduct: Product): Observable<Product | null> {
-    const index = this.products.findIndex(p => p.id === updatedProduct.id);
-    if (index !== -1) {
-      this.products[index] = updatedProduct;
-      return of(updatedProduct);
-    }
-    return of(null);
+  updateProduct(updatedProduct: Product): Observable<Product> {
+    return this.apiService.update<Product>(this.endpoint, updatedProduct.id, updatedProduct);
   }
 
-  deleteProduct(id: number): Observable<boolean> {
-    const index = this.products.findIndex(p => p.id === id);
-    if (index !== -1) {
-      this.products.splice(index, 1);
-      return of(true);
-    }
-    return of(false);
+  deleteProduct(id: number): Observable<void> {
+    return this.apiService.delete(this.endpoint, id);
   }
   
 }

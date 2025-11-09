@@ -26,7 +26,7 @@ export class ProductListComponent implements OnInit {
   totalRecords: number = 0;
   first: number = 0;
   rows: number = 10;
-  products: Product[] = [];
+  products!: Product[];
 
   constructor(
     private productService: ProductService,
@@ -36,9 +36,9 @@ export class ProductListComponent implements OnInit {
 
 
   ngOnInit() {
-    this.productService.getAllProducts().subscribe(products => {
-      this.products = products;
-      this.totalRecords = products.length;
+    this.productService.getAllProducts().subscribe((data: Product[]) => {
+      this.products = data;
+      this.totalRecords = data.length;
     });
   }
 
