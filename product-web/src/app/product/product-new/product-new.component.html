@@ -17,7 +17,7 @@
                         type="text" 
                         pInputText 
                         formControlName="name" 
-                        [value]="productToUpdate?.name || ''" 
+                        [appLimitText]="100"
                     />
                 </div>
 
@@ -28,7 +28,7 @@
                         type="text" 
                         pInputText 
                         formControlName="category" 
-                        [value]="productToUpdate?.category || ''" 
+                        [appLimitText]="50"
                     />
                 </div>
 
@@ -60,7 +60,8 @@
                         id="description" 
                         pInputTextarea 
                         formControlName="description"
-                    >{{ productToUpdate?.description || '' }}</textarea>
+                        [appLimitText]="255"
+                    ></textarea>
                 </div>
 
                 @if (apiErrorStatus) {

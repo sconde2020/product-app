@@ -8,6 +8,7 @@ import { Product } from '../model/product.model';
 import { ButtonModule } from 'primeng/button';
 import { MessageModule } from "primeng/message";
 import { ERROR_MESSAGES } from '../constants/error-message.constants';
+import { LimitTextDirective } from '../directives/limit-text.directive';
 
 @Component({
   selector: 'app-product-new',
@@ -16,7 +17,8 @@ import { ERROR_MESSAGES } from '../constants/error-message.constants';
     CardModule,
     ButtonModule,
     ReactiveFormsModule,
-    MessageModule
+    MessageModule,
+    LimitTextDirective
 ],
   templateUrl: './product-new.component.html',
   styleUrls: ['./product-new.component.scss']
@@ -60,11 +62,11 @@ export class ProductNewComponent implements OnInit {
   initializeForm(): void {
     this.productForm = this.formBuilder.group({
       id: [this.productId],
-      category: ['', Validators.required],
-      name: ['', Validators.required],
-      description: [''],
-      price: [0, Validators.required],
-      quantity: [0]
+      category: ['', [Validators.required]],
+      name: ['', [Validators.required]],
+      description: ['', [Validators.required]],
+      price: [0, [Validators.required, Validators.min(0.01)]],
+      quantity: [0, [Validators.required, Validators.min(1)]]
     });
   }
 
