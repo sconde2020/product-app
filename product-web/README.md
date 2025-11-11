@@ -1,8 +1,22 @@
-# ProductWeb
+# PRODUCT-WEB
+
+## Functionalities Overview
+
+PRODUCT-WEB is an Angular-based web application that serves as the frontend for managing products. It provides a user-friendly interface to perform various operations related to product management, including:
+
+- Viewing a list of products
+- Adding new products
+- Editing existing products
+- Deleting products
+- Searching and filtering products based on different criteria
+
+---
+
+## Development
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.0.2.
 
-## Development server
+### Development server
 
 To start a local development server, run:
 
@@ -12,21 +26,7 @@ ng serve
 
 Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
+### Building
 
 To build the project run:
 
@@ -36,7 +36,7 @@ ng build
 
 This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
 
-## Running unit tests
+### Running unit tests
 
 To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
 
@@ -44,15 +44,31 @@ To execute unit tests with the [Karma](https://karma-runner.github.io) test runn
 ng test
 ```
 
-## Running end-to-end tests
+This will launch the Karma test runner and execute all unit tests in your project.
 
-For end-to-end (e2e) testing, run:
+---
+
+## Deploy with Docker
+
+### Production build
+
+To create a production build of your application, run:
 
 ```bash
-ng e2e
+docker build -t product-web:latest .
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+### Running the production build
+
+To run the production build in a Docker container, use the following command:
+
+```bash
+docker run -p 3000:80 product-web:latest
+```
+
+This will start the application and make it accessible at `http://localhost:3000/`
+
+---
 
 ## Additional Resources
 

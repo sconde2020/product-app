@@ -24,7 +24,7 @@ WORKDIR /app
 COPY --from=build /app/target/product-api-0.0.1-SNAPSHOT.jar app.jar
 
 # Expose port
-EXPOSE 8080
+EXPOSE 8091
 
 # Run the jar
 ENTRYPOINT ["java","-jar","app.jar"]
