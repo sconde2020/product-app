@@ -48,7 +48,7 @@ export class ProductNewComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const idParam = this.route.snapshot.paramMap.get('id');
+    const idParam = this.route.snapshot?.paramMap?.get('id');
     this.productId = idParam ? +idParam : null;
 
     if (this.productId !== null) {

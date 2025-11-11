@@ -54,8 +54,6 @@ export class ProductListComponent {
   }
 
   lazyLoadProducts(event: any) {
-    console.log('Lazy load event:', event);
-
     this.pageSize = event.rows;
     this.currentPage = Math.floor(event.first / event.rows);
 
