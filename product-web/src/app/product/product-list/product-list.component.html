@@ -26,15 +26,17 @@
           >
           </p-message>
         } @else{
-          <p-table
+            <p-table
             [value]="products"
             [paginator]="true"
-            [rows]="10"
+            [rows]="pageSize"
             [rowsPerPageOptions]="[5, 10, 20, 50]"
             [totalRecords]="totalRecords"
             [sortMode]="'single'"
             [tableStyle]="{ 'min-width': '60rem' }"
-          >
+            [lazy]="true"
+            (onLazyLoad)="lazyLoadProducts($event)"
+            >
             <ng-template pTemplate="header">
               <tr>
                 <th pSortableColumn="name" style="width: 200px;">

@@ -41,23 +41,76 @@
       border: 0.1rem solid #dee2e6;
       border-top: none;
       padding: 0.75rem;
-
-      .p-paginator-current {
-        color: #6c757d;
-        font-size: 0.875rem;
-      }
+      margin-bottom: 3rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
 
       .p-paginator-page {
         min-width: 2.5rem;
-        height: 2.5rem;
+        height: 3rem;
+        margin: 0 0.25rem;
+        border-radius: 0.5rem;
+        font-weight: 600;
+        color: blue;
+        border: 1px solid transparent;
+        transition: all 0.2s ease;
+
+        &:hover {
+          background-color: #e2e6ea;
+          border-color: #dee2e6;
+        }
+
+        &:focus {
+          outline: none;
+          border-color: #80bdff;
+          box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.3);
+        }
 
         &.p-highlight {
           background-color: #007bff;
           border-color: #007bff;
           color: #ffffff;
+          box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+          transform: scale(1.05);
+
+          &:focus {
+            outline: none;
+            background-color: #0069d9; /* slightly darker focus tone */
+            border-color: #0062cc;
+            box-shadow: 0 0 0 4px rgba(38, 143, 255, 0.4);
+          }
+        }
+      }
+
+      .p-paginator-prev,
+      .p-paginator-next {
+        border-radius: 50%;
+        width: 2.5rem;
+        height: 2.5rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #41596d;
+
+        &:hover {
+          background-color: #e9ecef;
+        }
+
+        &.p-disabled {
+          opacity: 0.5;
+          pointer-events: none;
+        }
+
+        &:focus {
+          outline: none;
+          border: 1px solid #80bdff;
+          box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.3);
         }
       }
     }
+
   }
 
   /* === Table Header (caption) === */

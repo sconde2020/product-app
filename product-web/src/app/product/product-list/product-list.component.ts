@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CardModule } from 'primeng/card';
 import { TableModule } from 'primeng/table';
@@ -11,7 +11,7 @@ import { ProductService } from '../services/product.service';
 import { ProductListResponse } from '../model/product-list-response';
 import { MessageModule } from "primeng/message";
 import { ERROR_MESSAGES } from '../constants/error-message.constants';
- 
+import { TABLE_CONFIG } from '../constants/page.constants';
 
 @Component({
   selector: 'app-product-list',
@@ -26,11 +26,13 @@ import { ERROR_MESSAGES } from '../constants/error-message.constants';
   templateUrl: './product-list.component.html',
   styleUrl: './product-list.component.scss'
 })
-export class ProductListComponent implements OnInit {
-  totalRecords: number = 0;
-  first: number = 0;
-  rows: number = 10;
+export class ProductListComponent {
   products!: Product[];
+  totalRecords: number = TABLE_CONFIG.DEFAULTS.TOTAL_RECORDS;
+  currentPage: number = TABLE_CONFIG.DEFAULTS.CURRENT_PAGE;
+  pageSize: number = TABLE_CONFIG.DEFAULTS.PAGE_SIZE;
+  sortField: string = TABLE_CONFIG.DEFAULTS.SORT_FIELD;
+  sortOrder: string = TABLE_CONFIG.DEFAULTS.SORT_ORDER;
 
   apiErrorStatus: boolean = false;
   apiErrorMessage: string = '';
@@ -41,19 +43,6 @@ export class ProductListComponent implements OnInit {
     private route: ActivatedRoute,
   ) {}
 
-
-  ngOnInit() {
-    this.productService.getAllProducts().subscribe({
-      next: (response: ProductListResponse) => {
-        this.products = response.content;
-        this.totalRecords = response.page.totalElements || 0;
-      },
-      error: (error) => {
-        this.apiErrorStatus = true;
-        this.apiErrorMessage = error.message || ERROR_MESSAGES.FETCH_PRODUCTS;
-      }
-    });
-  }
 
   viewDetails(productId: number): void {
     this.router.navigate(['details', productId], { relativeTo: this.route });
@@ -72,23 +61,37 @@ export class ProductListComponent implements OnInit {
     this.totalRecords = this.products.length;
   }
   
-  onPageChange(event: any) {
-    this.first = event.first;
-    this.rows = event.rows;
-  }
+  lazyLoadProducts(event: any) {
+    console.log('Lazy load event:', event);
 
-  onRowsChange(rows: number) {
-    this.rows = rows;
-    this.first = 0; 
-  }
+    this.pageSize = event.rows;
+    this.currentPage = Math.floor(event.first / event.rows);
 
-  getLastPageEntry(): number {
-    const lastEntry = this.first + this.rows;
-    return lastEntry > this.totalRecords ? this.totalRecords : lastEntry;
+    this.sortField = event.sortField || TABLE_CONFIG.DEFAULTS.SORT_FIELD;
+    this.sortOrder = event.sortOrder === 1 ? TABLE_CONFIG.SORT_ORDER.ASC : TABLE_CONFIG.SORT_ORDER.DESC;
+
+    this.loadProducts();
   }
 
   getRowStyleClass(rowIndex: number): string {
     return rowIndex % 2 === 0 ? 'even-row' : 'odd-row';
- }
+  }
 
+  private loadProducts(): void {
+    this.productService.getAllProducts(
+      this.currentPage,
+      this.pageSize,
+      this.sortField,
+      this.sortOrder
+    ).subscribe({
+      next: (response: ProductListResponse) => {
+        this.products = response.content;
+        this.totalRecords = response?.page?.totalElements || 10;
+      },
+      error: (error) => {
+        this.apiErrorStatus = true;
+        this.apiErrorMessage = error.message || ERROR_MESSAGES.FETCH_PRODUCTS;
+      }
+    });
+  }
 }

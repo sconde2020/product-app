@@ -5,6 +5,7 @@ import { ProductListResponse } from '../model/product-list-response';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { ERROR_MESSAGES } from '../constants/error-message.constants';
+import { PageParams } from '../model/page-params';
 
 @Injectable({
   providedIn: 'root'
@@ -25,8 +26,21 @@ export class ProductService {
       .pipe(catchError(err => this.handleError(err)));
   }
 
-  getAllProducts(): Observable<ProductListResponse> {
-    return this.apiService.getAll<ProductListResponse>(this.endpoint)
+  getAllProducts(
+    currentPage: number, 
+    pageSize: number, 
+    sortField: string, 
+    sortOrder: string
+  ): Observable<ProductListResponse> 
+  {
+    const params: PageParams = {
+      page: currentPage,
+      size: pageSize,
+      sortBy: sortField,
+      direction: sortOrder
+    };
+
+    return this.apiService.getAll<ProductListResponse>(this.endpoint, params)
       .pipe(catchError(err => this.handleError(err)));
   }
 

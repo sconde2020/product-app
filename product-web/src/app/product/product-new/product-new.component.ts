@@ -65,8 +65,8 @@ export class ProductNewComponent implements OnInit {
       category: ['', [Validators.required]],
       name: ['', [Validators.required]],
       description: ['', [Validators.required]],
-      price: [0, [Validators.required, Validators.min(0.01)]],
-      quantity: [0, [Validators.required, Validators.min(1)]]
+      price: [0.1, [Validators.required, Validators.min(0.01)]],
+      quantity: [1, [Validators.required, Validators.min(1)]]
     });
   }
 
