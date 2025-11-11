@@ -4,15 +4,14 @@ import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ApiService {
-
-  constructor(private http : HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   private baseUrl = environment.baseUrl;
 
-  getAll<T>(endpoint: string, params?: Record<string, any>): Observable<T>{
+  getAll<T>(endpoint: string, params?: Record<string, any>): Observable<T> {
     const url = `${this.baseUrl}/${endpoint}`;
     return this.http.get<T>(url, { params });
   }

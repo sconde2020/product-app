@@ -1,4 +1,3 @@
-
 /* === Content === */
 .product-new-content {
   padding: 2rem 1.5rem;
@@ -39,6 +38,11 @@
         resize: vertical;
         min-height: 8rem;
       }
+
+      .field-error-message {
+        color: #dc3545;
+        font-size: 0.875rem;
+      }
     }
 
     .form-buttons {
@@ -47,53 +51,55 @@
       gap: 1rem;
 
       button[pButton] {
-      align-self: center;
-      margin-top: 1rem;
-      font-weight: 700;
-      border-radius: 0.5rem;
-      padding: 0.6rem 1.5rem;
-      font-size: 1rem;
-      transition: background-color 0.2s ease, box-shadow 0.2s ease;
+        align-self: center;
+        margin-top: 1rem;
+        font-weight: 700;
+        border-radius: 0.5rem;
+        padding: 0.6rem 1.5rem;
+        font-size: 1rem;
+        transition:
+          background-color 0.2s ease,
+          box-shadow 0.2s ease;
 
-      &.p-button-success {
-        background-color: #28a745;
-        border-color: #28a745;
-        color: #fff;
-        padding: 1rem 2rem;
+        &.p-button-success {
+          background-color: #28a745;
+          border-color: #28a745;
+          color: #fff;
+          padding: 1rem 2rem;
 
-        &:hover {
-          background-color: #218838;
-          border-color: #1e7e34;
+          &:hover {
+            background-color: #218838;
+            border-color: #1e7e34;
+          }
+
+          &:focus {
+            box-shadow: 0 0 0 0.2rem rgba(72, 180, 97, 0.5);
+          }
+
+          &:disabled {
+            background-color: #a8d5b0;
+            border-color: #a8d5b0;
+            cursor: not-allowed;
+          }
         }
 
-        &:focus {
-          box-shadow: 0 0 0 0.2rem rgba(72, 180, 97, 0.5);
-        }
+        &.p-button-primary {
+          background-color: #007bff;
+          border-color: #007bff;
+          padding: 1rem 2rem;
 
-        &:disabled {
-          background-color: #a8d5b0;
-          border-color: #a8d5b0;
-          cursor: not-allowed;
+          &:hover {
+            background-color: #0056b3;
+            border-color: #004085;
+          }
+
+          &:disabled {
+            background-color: #b0c4de;
+            border-color: #b0c4de;
+            cursor: not-allowed;
+          }
         }
       }
-
-      &.p-button-primary {
-        background-color: #007bff;
-        border-color: #007bff;
-        padding: 1rem 2rem;
-
-        &:hover {
-          background-color: #0056b3;
-          border-color: #004085;
-        }
-
-        &:disabled {
-          background-color: #b0c4de;
-          border-color: #b0c4de;
-          cursor: not-allowed;
-        }
-      }
-    }
     }
   }
 }

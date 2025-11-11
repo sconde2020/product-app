@@ -1,20 +1,20 @@
 export interface Product {
-    id: number;
-    name: string;
-    price: number;
-    category: string;
-    description: string;
-    quantity: number;
+  id: number;
+  name: string;
+  price: number;
+  category: string;
+  description: string;
+  quantity: number;
 }
 
 export interface PageInfo {
-    size: number;
-    number: number;
-    totalElements: number;
-    totalPages: number;
+  size: number;
+  number: number;
+  totalElements: number;
+  totalPages: number;
 }
 
 export interface ProductListResponse {
-    content: Product[];
-    page: PageInfo;
+  content: Product[];
+  page: PageInfo;
 }

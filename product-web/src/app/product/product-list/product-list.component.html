@@ -1,6 +1,5 @@
 <div class="product-card-container">
   <p-card class="product-card">
-     
     <ng-template pTemplate="header">
       <div class="product-card-header">
         <h2>Our Products</h2>
@@ -17,87 +16,81 @@
       </div>
     </ng-template>
 
-      <ng-template pTemplate="content"> 
-        @if (apiErrorStatus) {
-          <p-message 
-            severity="error" 
-            text="{{ apiErrorMessage }}"
-            class="error-message"
-          >
-          </p-message>
-        } @else{
-            <p-table
-            [value]="products"
-            [paginator]="true"
-            [rows]="pageSize"
-            [rowsPerPageOptions]="[5, 10, 20, 50]"
-            [totalRecords]="totalRecords"
-            [sortMode]="'single'"
-            [tableStyle]="{ 'min-width': '60rem' }"
-            [lazy]="true"
-            (onLazyLoad)="lazyLoadProducts($event)"
-            >
-            <ng-template pTemplate="header">
-              <tr>
-                <th pSortableColumn="name" style="width: 200px;">
-                  Name <p-sortIcon field="name"></p-sortIcon>
-                </th>
-                <th pSortableColumn="category" style="width: 200px;">
-                  Category <p-sortIcon field="category"></p-sortIcon>
-                </th>
-                <th pSortableColumn="price" style="width: 120px;">
-                  Price <p-sortIcon field="price"></p-sortIcon>
-                </th>
-                <th style="width: 250px;">Actions</th>
-              </tr>
-            </ng-template>
+    <ng-template pTemplate="content">
+      @if (apiErrorStatus) {
+        <p-message severity="error" text="{{ apiErrorMessage }}" class="error-message"> </p-message>
+      } @else {
+        <p-table
+          [value]="products"
+          [paginator]="true"
+          [rows]="pageSize"
+          [rowsPerPageOptions]="[5, 10, 20, 50]"
+          [totalRecords]="totalRecords"
+          [sortMode]="'single'"
+          [tableStyle]="{ 'min-width': '60rem' }"
+          [lazy]="true"
+          (onLazyLoad)="lazyLoadProducts($event)"
+        >
+          <ng-template pTemplate="header">
+            <tr>
+              <th pSortableColumn="name" style="width: 200px">
+                Name <p-sortIcon field="name"></p-sortIcon>
+              </th>
+              <th pSortableColumn="category" style="width: 200px">
+                Category <p-sortIcon field="category"></p-sortIcon>
+              </th>
+              <th pSortableColumn="price" style="width: 120px">
+                Price <p-sortIcon field="price"></p-sortIcon>
+              </th>
+              <th style="width: 250px">Actions</th>
+            </tr>
+          </ng-template>
 
-            <ng-template pTemplate="body" let-product>
-              <tr>
-                <td>{{ product.name }}</td>
-                <td>{{ product.category }}</td>
-                <td>{{ product.price | currency }}</td>
-                <td>
-                  <div class="action-buttons">
-                    <button
-                      pButton
-                      type="button"
-                      icon="pi pi-eye"
-                      label="View"
-                      class="p-button-primary p-button-sm"
-                      (click)="viewDetails(product.id)"
-                    ></button>
+          <ng-template pTemplate="body" let-product>
+            <tr>
+              <td>{{ product.name }}</td>
+              <td>{{ product.category }}</td>
+              <td>{{ product.price | currency }}</td>
+              <td>
+                <div class="action-buttons">
+                  <button
+                    pButton
+                    type="button"
+                    icon="pi pi-eye"
+                    label="View"
+                    class="p-button-primary p-button-sm"
+                    (click)="viewDetails(product.id)"
+                  ></button>
 
-                    <button
-                      pButton
-                      type="button"
-                      icon="pi pi-pencil"
-                      label="Edit"
-                      class="p-button-success p-button-sm"
-                      (click)="updateProduct(product.id)"
-                    ></button>
+                  <button
+                    pButton
+                    type="button"
+                    icon="pi pi-pencil"
+                    label="Edit"
+                    class="p-button-success p-button-sm"
+                    (click)="updateProduct(product.id)"
+                  ></button>
 
-                    <button
-                      pButton
-                      type="button"
-                      icon="pi pi-trash"
-                      label="Delete"
-                      class="p-button-danger p-button-sm"
-                      (click)="deleteProduct(product.id)"
-                    ></button>
-                  </div>
-                </td>
-              </tr>
-            </ng-template>
+                  <button
+                    pButton
+                    type="button"
+                    icon="pi pi-trash"
+                    label="Delete"
+                    class="p-button-danger p-button-sm"
+                    (click)="deleteProduct(product.id)"
+                  ></button>
+                </div>
+              </td>
+            </tr>
+          </ng-template>
 
-            <ng-template pTemplate="emptymessage">
-              <tr>
-                <td colspan="3" class="empty-message">No products found.</td>
-              </tr>
-            </ng-template>
-          </p-table>
-        }
-      </ng-template>
-    
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="3" class="empty-message">No products found.</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      }
+    </ng-template>
   </p-card>
 </div>

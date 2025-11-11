@@ -1,18 +1,13 @@
 <div class="product-card-container">
   @if (product) {
     <p-card class="product-card">
-      
       @if (apiErrorStatus) {
-        <p-message 
-         severity="error" 
-         text="{{ apiErrorMessage }}" 
-         class="error-message">
-        </p-message>
+        <p-message severity="error" text="{{ apiErrorMessage }}" class="error-message"> </p-message>
       } @else {
         <ng-template pTemplate="header">
           <div class="product-card-header">
             <h2>{{ product.name }}</h2>
-          </div> 
+          </div>
         </ng-template>
 
         <ng-template pTemplate="content">
@@ -22,20 +17,18 @@
             <p><strong>Price:</strong> ${{ product.price }}</p>
             <p><strong>Quantity:</strong> {{ product.quantity }}</p>
             <p><strong>Description:</strong> {{ product.description }}</p>
-            <button 
-                type="submit" 
-                pButton 
-                label='Back to List'
-                class="p-button-primary p-button-sm"
-                (click)="onBackToList()"
-            >
-            </button>
+            <button
+              type="submit"
+              pButton
+              label="Back to List"
+              class="p-button-primary p-button-sm"
+              (click)="onBackToList()"
+            ></button>
           </div>
         </ng-template>
-      }      
+      }
     </p-card>
-  }
-  @else {
+  } @else {
     <p-message severity="info" text="Product not found."></p-message>
   }
 </div>

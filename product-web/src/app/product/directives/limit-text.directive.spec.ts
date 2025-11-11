@@ -1,4 +1,4 @@
-import { LimitTextDirective } from "./limit-text.directive";
+import { LimitTextDirective } from './limit-text.directive';
 
 describe('LimitTextDirective', () => {
   it('should create an instance', () => {

@@ -1,95 +1,120 @@
 <div class="product-card-container">
   <p-card class="product-card">
-
     <ng-template pTemplate="header">
-        <div class="product-card-header">
-            <h2>{{ productToUpdate ? 'Update Product' : 'Create New Product' }}</h2>
-        </div>
+      <div class="product-card-header">
+        <h2>{{ productToUpdate ? 'Update Product' : 'Create New Product' }}</h2>
+      </div>
     </ng-template>
 
     <ng-template pTemplate="content">
-        <div class="product-new-content">
-            <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
-                <div class="p-field">
-                    <label for="name">Name</label>
-                    <input 
-                        id="name" 
-                        type="text" 
-                        pInputText 
-                        formControlName="name" 
-                        [appLimitText]="100"
-                    />
-                </div>
+      <div class="product-new-content">
+        <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+          <div class="p-field">
+            <label for="name">{{ labels.name }}</label>
+            <input
+              id="name"
+              type="text"
+              pInputText
+              formControlName="name"
+              [appLimitText]="100"
+              [placeholder]="placeholders.name"
+            />
+            @if (invalidateField('name')) {
+              <span class="field-error-message">
+                {{ errors.name }}
+              </span>
+            }
+          </div>
 
-                <div class="p-field">
-                    <label for="category">Category</label>
-                    <input 
-                        id="category" 
-                        type="text" 
-                        pInputText 
-                        formControlName="category" 
-                        [appLimitText]="50"
-                    />
-                </div>
+          <div class="p-field">
+            <label for="category">{{ labels.category }}</label>
+            <input
+              id="category"
+              type="text"
+              pInputText
+              formControlName="category"
+              [appLimitText]="50"
+              [placeholder]="placeholders.category"
+            />
+            @if (invalidateField('category')) {
+              <span class="field-error-message">
+                {{ errors.category }}
+              </span>
+            }
+          </div>
 
-                <div class="p-field">
-                    <label for="price">Price</label>
-                    <input 
-                        id="price" 
-                        type="number" 
-                        pInputText 
-                        formControlName="price" 
-                    />
-                </div>
+          <div class="p-field">
+            <label for="price">{{ labels.price }}</label>
+            <input
+              id="price"
+              type="number"
+              pInputText
+              formControlName="price"
+              [placeholder]="placeholders.price"
+            />
 
-                <div class="p-field">
-                    <label for="quantity">Quantity</label>
-                    <input 
-                        id="quantity" 
-                        type="number" 
-                        pInputText 
-                        formControlName="quantity" 
-                    />
-                </div>
+            @if (invalidateField('price')) {
+              <span class="field-error-message">
+                {{ errors.price }}
+              </span>
+            }
+          </div>
 
-                <div class="p-field">
-                    <label for="description">Description</label>
-                    <textarea 
-                        id="description" 
-                        pInputTextarea 
-                        formControlName="description"
-                        [appLimitText]="255"
-                    ></textarea>
-                </div>
+          <div class="p-field">
+            <label for="quantity">{{ labels.quantity }}</label>
+            <input
+              id="quantity"
+              type="number"
+              pInputText
+              formControlName="quantity"
+              [placeholder]="placeholders.quantity"
+            />
+            @if (invalidateField('quantity')) {
+              <span class="field-error-message">
+                {{ errors.quantity }}
+              </span>
+            }
+          </div>
 
-                @if (apiErrorStatus) {
-                    <p-message 
-                        severity="error" 
-                        text="{{ apiErrorMessage }}"
-                        class="error-message"
-                    >
-                    </p-message>
-                }
-                <div class="form-buttons">
-                    <button 
-                        type="button" 
-                        pButton 
-                        label="Cancel" 
-                        class="p-button-primary p-button-sm"
-                        (click)="onCancel()"
-                    ></button>
+          <div class="p-field">
+            <label for="description">{{ labels.description }}</label>
+            <textarea
+              id="description"
+              pInputTextarea
+              formControlName="description"
+              [appLimitText]="255"
+              [placeholder]="placeholders.description"
+            ></textarea>
+            @if (invalidateField('description')) {
+              <span class="field-error-message">
+                {{ errors.description }}
+              </span>
+            }
+          </div>
 
-                    <button 
-                        type="submit" 
-                        pButton 
-                        label="Validate"
-                        [disabled]="productForm.invalid"
-                        class="p-button-success p-button-sm"
-                    ></button>
-                </div>
-            </form>
-        </div>
+          @if (apiErrorStatus) {
+            <p-message severity="error" text="{{ apiErrorMessage }}" class="error-message">
+            </p-message>
+          }
+          <div class="form-buttons">
+            <button
+              type="button"
+              pButton
+              label="Cancel"
+              class="p-button-primary p-button-sm"
+              (click)="onCancel()"
+            ></button>
+
+            <button
+              type="submit"
+              pButton
+              label="Validate"
+              [disabled]="productForm.invalid"
+              class="p-button-success p-button-sm"
+            ></button>
+          </div>
+        </form>
+      </div>
     </ng-template>
-    
   </p-card>
 </div>

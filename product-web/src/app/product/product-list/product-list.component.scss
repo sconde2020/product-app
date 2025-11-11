@@ -1,5 +1,4 @@
 :host ::ng-deep {
-
   /* === Table Styling === */
   .p-datatable {
     .p-datatable-thead > tr > th {
@@ -110,7 +109,6 @@
         }
       }
     }
-
   }
 
   /* === Table Header (caption) === */
@@ -136,10 +134,11 @@
     gap: 0.5rem;
     flex-wrap: wrap;
     justify-content: center;
-    align-items: center;    
+    align-items: center;
   }
 
-  .action-buttons, .new-button {
+  .action-buttons,
+  .new-button {
     .p-button {
       margin: 0;
       display: inline-flex;
@@ -202,7 +201,8 @@
   }
 
   /* === Responsive Design === */
-  @media (max-width: 48rem) { /* 768px */
+  @media (max-width: 48rem) {
+    /* 768px */
     .product-list-header {
       flex-direction: column;
       align-items: stretch;

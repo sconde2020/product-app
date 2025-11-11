@@ -10,14 +10,9 @@ import { ERROR_MESSAGES } from '../constants/error-message.constants';
 
 @Component({
   selector: 'app-product-detail',
-  imports: [
-    CommonModule,
-    CardModule,
-    ButtonModule,
-    MessageModule
-  ],
+  imports: [CommonModule, CardModule, ButtonModule, MessageModule],
   templateUrl: './product-detail.component.html',
-  styleUrl: './product-detail.component.scss'
+  styleUrl: './product-detail.component.scss',
 })
 export class ProductDetailComponent implements OnInit {
   product!: Product;
@@ -27,7 +22,7 @@ export class ProductDetailComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private productService: ProductService
+    private productService: ProductService,
   ) {}
 
   ngOnInit(): void {
@@ -40,7 +35,7 @@ export class ProductDetailComponent implements OnInit {
         error: (error) => {
           this.apiErrorStatus = true;
           this.apiErrorMessage = error.message || ERROR_MESSAGES.FETCH_PRODUCT_DETAILS;
-        }
+        },
       });
     }
   }
