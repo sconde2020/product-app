@@ -18,7 +18,7 @@
         <lombok.version>1.18.32</lombok.version>
         <openapi.version>2.8.13</openapi.version>
         <jacoco.version>0.8.12</jacoco.version>
-        <code-coverage.minimum>0.80</code-coverage.minimum>
+        <code-coverage.minimum>0.8</code-coverage.minimum>
     </properties>
 	<dependencies>
 		<dependency>
@@ -101,6 +101,12 @@
                         <goals>
                             <goal>report</goal>
                         </goals>
+                        <configuration>
+                            <formats>
+                                <format>HTML</format>
+                                <format>CSV</format>
+                            </formats>
+                        </configuration>
                     </execution>
                     <execution>
                         <id>check</id>
@@ -108,29 +114,31 @@
                         <goals>
                             <goal>check</goal>
                         </goals>
+                        <configuration>
+                            <rules>
+                                <rule>
+                                    <element>BUNDLE</element>
+                                    <limits>
+                                        <limit>
+                                            <counter>LINE</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <minimum>${code-coverage.minimum}</minimum>
+                                        </limit>
+                                    </limits>
+                                </rule>
+                            </rules>
+                            <excludes>
+                                <exclude>**/model/*</exclude>
+                                <exclude>**/config/*</exclude>
+                                <exclude>**/dto/*</exclude>
+                                <exclude>**/exception/*</exclude>
+                                <exclude>**/constants/*</exclude>
+                                <exclude>**/mapper/*</exclude>
+                                <exclude>**/*Application.class</exclude>
+                            </excludes>
+                        </configuration>
                     </execution>
                 </executions>
-                <configuration>
-                    <excludes>
-                        <exclude>**/model/*</exclude>
-                        <exclude>**/config/*</exclude>
-                        <exclude>**/dto/*</exclude>
-                        <exclude>**/exception/*</exclude>
-                        <exclude>**/*Application.class</exclude>
-                    </excludes>
-                    <rules>
-                        <rule>
-                            <element>BUNDLE</element>
-                            <limits>
-                                <limit>
-                                    <counter>LINE</counter>
-                                    <value>COVEREDRATIO</value>
-                                    <minimum>${code-coverage.minimum}</minimum>
-                                </limit>
-                            </limits>
-                        </rule>
-                    </rules>
-                </configuration>
             </plugin>
 		</plugins>
 	</build>

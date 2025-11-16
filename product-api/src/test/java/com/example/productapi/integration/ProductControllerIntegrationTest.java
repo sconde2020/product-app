@@ -55,7 +55,7 @@ class ProductControllerIntegrationTest {
         mockMvc.perform(post("/api/products")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").exists())
                 .andExpect(jsonPath("$.name").value("Laptop Pro"))
                 .andExpect(jsonPath("$.price").value(1200))

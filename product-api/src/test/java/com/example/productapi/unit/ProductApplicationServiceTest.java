@@ -1,7 +1,6 @@
 package com.example.productapi.unit;
 
 import com.example.productapi.application.dto.ProductDto;
-import com.example.productapi.application.exception.InvalidProductException;
 import com.example.productapi.application.mapper.ProductMapper;
 import com.example.productapi.application.service.ProductApplicationService;
 import com.example.productapi.domain.exception.ProductNotFoundException;
@@ -56,61 +55,6 @@ class ProductApplicationServiceTest {
                 .containsExactly(1L, "Laptop", "Electronics", "High-end laptop", 10);
 
         verify(repository, times(1)).save(any(Product.class));
-    }
-
-    @Test
-    void shouldThrowInvalidProductException_givenEmptyName_whenCreate() {
-        ProductDto dto = new ProductDto(null, "", BigDecimal.valueOf(100), "Test", "Desc", 1);
-
-        assertThatThrownBy(() -> service.create(dto))
-                .isInstanceOf(InvalidProductException.class)
-                .hasMessage("Name cannot be empty");
-
-        verify(repository, never()).save(any());
-    }
-
-    @Test
-    void shouldThrowInvalidProductException_givenNegativePrice_whenCreate() {
-        ProductDto dto = new ProductDto(null, "Phone", BigDecimal.valueOf(-5), "Electronics", "Smartphone", 5);
-
-        assertThatThrownBy(() -> service.create(dto))
-                .isInstanceOf(InvalidProductException.class)
-                .hasMessage("Price must be positive");
-
-        verify(repository, never()).save(any());
-    }
-
-    @Test
-    void shouldThrowInvalidProductException_givenEmptyCategory_whenCreate() {
-        ProductDto dto = new ProductDto(null, "Phone", BigDecimal.valueOf(5), "", "Smartphone", 5);
-
-        assertThatThrownBy(() -> service.create(dto))
-                .isInstanceOf(InvalidProductException.class)
-                .hasMessage("Category cannot be empty");
-
-        verify(repository, never()).save(any());
-    }
-
-    @Test
-    void shouldThrowInvalidProductException_givenEmptyDescription_whenCreate() {
-        ProductDto dto = new ProductDto(null, "Phone", BigDecimal.valueOf(5), "Electronics", null, 5);
-
-        assertThatThrownBy(() -> service.create(dto))
-                .isInstanceOf(InvalidProductException.class)
-                .hasMessage("Description cannot be empty");
-
-        verify(repository, never()).save(any());
-    }
-
-    @Test
-    void shouldThrowInvalidProductException_givenNullQuantity_whenCreate() {
-        ProductDto dto = new ProductDto(null, "Phone", BigDecimal.valueOf(6), "Electronics", "Smartphone", 0);
-
-        assertThatThrownBy(() -> service.create(dto))
-                .isInstanceOf(InvalidProductException.class)
-                .hasMessage("Quantity must be positive");
-
-        verify(repository, never()).save(any());
     }
 
     // ----------------- FIND BY ID -----------------

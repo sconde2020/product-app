@@ -21,10 +21,19 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
+    @Column(nullable = false, length = 100)
     String name;
+
+    @Column(nullable = false)
     BigDecimal price;
+
+    @Column(nullable = false, length = 50)
     String category;
+
+    @Column(nullable = false, length = 1000)
     String description;
+
+    @Column(nullable = false)
     Integer quantity;
 
     public Product(String name, BigDecimal price) {
@@ -43,16 +52,14 @@ public class Product {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false; // protège contre les proxys Hibernate
+        if (o == null || getClass() != o.getClass()) return false;
 
         Product product = (Product) o;
 
-        // Comparaison basée sur l'id pour les entités persistées
         if (id != null && product.id != null) {
             return id.equals(product.id);
         }
 
-        // fallback sur les champs métier pour les entités non persistées
         return Objects.equals(name, product.name)
                 && Objects.equals(price, product.price)
                 && Objects.equals(category, product.category)
@@ -62,7 +69,6 @@ public class Product {
 
     @Override
     public int hashCode() {
-        // cohérence : id prioritaire s’il existe
         return id != null
                 ? id.hashCode()
                 : Objects.hash(name, price, category, description, quantity);

@@ -1,7 +1,6 @@
 package com.example.productapi.application.service;
 
 import com.example.productapi.application.dto.ProductDto;
-import com.example.productapi.application.exception.InvalidProductException;
 import com.example.productapi.application.mapper.ProductMapper;
 import com.example.productapi.domain.exception.ProductNotFoundException;
 import com.example.productapi.domain.model.Product;
@@ -27,7 +26,6 @@ public class ProductApplicationService {
     }
 
     public ProductDto create(ProductDto dto) {
-        validate(dto);
         Product saved = repository.save(mapper.toEntity(dto));
         return mapper.toDto(saved);
     }
@@ -61,23 +59,5 @@ public class ProductApplicationService {
             throw new ProductNotFoundException(id);
         }
         repository.deleteById(id);
-    }
-
-    private void validate(ProductDto dto) {
-        if (dto.name() == null || dto.name().isBlank()) {
-            throw new InvalidProductException("Name cannot be empty");
-        }
-        if (dto.price() == null || dto.price().doubleValue() <= 0) {
-            throw new InvalidProductException("Price must be positive");
-        }
-        if (dto.category() == null || dto.category().isBlank()) {
-            throw new InvalidProductException("Category cannot be empty");
-        }
-        if (dto.description() == null || dto.description().isBlank()) {
-            throw new InvalidProductException("Description cannot be empty");
-        }
-        if (dto.quantity() == null || dto.quantity() <= 0) {
-            throw new InvalidProductException("Quantity must be positive");
-        }
     }
 }
