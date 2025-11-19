@@ -5,9 +5,15 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class ValidationMessages {
 
-    public final static String CATEGORY_EMPTY = "Category of a product cannot be null or empty";
+    public final static String CATEGORY_EMPTY = "Category of a cannot be null or empty";
 
-    public final static String CATEGORY_TOO_LONG = "Category of a product must be at most 50 characters";
+    public final static String CATEGORY_CODE_EMPTY = "Code of a product category cannot be null or empty";
+
+    public final static String CATEGORY_CODE_TOO_LONG = "Category of a product must be at most 50 characters";
+
+    public final static String CATEGORY_NAME_EMPTY = "Name of a product category cannot be null or empty";
+
+    public final static String CATEGORY_NAME_TOO_LONG = "Name of a product must be at most 100 characters";
 
     public final static String NAME_EMPTY = "Name of a product cannot be null or empty";
 

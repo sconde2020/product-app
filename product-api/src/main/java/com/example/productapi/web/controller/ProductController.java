@@ -1,6 +1,7 @@
 package com.example.productapi.web.controller;
 
 import com.example.productapi.application.dto.ProductDto;
+import com.example.productapi.application.dto.ProductQueryParams;
 import com.example.productapi.application.service.ProductApplicationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -10,6 +11,7 @@ import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +25,6 @@ import java.net.URI;
 @EnableSpringDataWebSupport(pageSerializationMode = EnableSpringDataWebSupport.PageSerializationMode.VIA_DTO)
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-
 public class ProductController {
 
     private final ProductApplicationService service;
@@ -52,16 +53,12 @@ public class ProductController {
         return ResponseEntity.ok(product);
     }
 
-    @Operation(summary = "List all products with pagination")
+    @Operation(summary = "List all products with pagination, filters and sorting")
     @ApiResponse(responseCode = "200", description = "Product retrieved successfully")
     @GetMapping
-    public ResponseEntity<Page<ProductDto>> list(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "id") String sortBy,
-            @RequestParam(defaultValue = "asc") String direction
+    public ResponseEntity<Page<ProductDto>> list(@ParameterObject ProductQueryParams queryParams
     ) {
-        Page<ProductDto> result = service.getAll(page, size, sortBy, direction);
+        Page<ProductDto> result = service.getAll(queryParams);
         return ResponseEntity.ok(result);
     }
 

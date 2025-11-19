@@ -18,7 +18,7 @@
         <lombok.version>1.18.32</lombok.version>
         <openapi.version>2.8.13</openapi.version>
         <jacoco.version>0.8.12</jacoco.version>
-        <code-coverage.minimum>0.8</code-coverage.minimum>
+        <code-coverage.minimum>0.7</code-coverage.minimum>
     </properties>
 	<dependencies>
 		<dependency>

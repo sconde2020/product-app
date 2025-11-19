@@ -1,9 +1,13 @@
 package com.example.productapi.unit;
 
+import com.example.productapi.application.dto.CategoryDto;
 import com.example.productapi.application.dto.ProductDto;
+import com.example.productapi.application.dto.ProductQueryParams;
+import com.example.productapi.application.mapper.CategoryMapper;
 import com.example.productapi.application.mapper.ProductMapper;
 import com.example.productapi.application.service.ProductApplicationService;
 import com.example.productapi.domain.exception.ProductNotFoundException;
+import com.example.productapi.domain.model.Category;
 import com.example.productapi.domain.model.Product;
 import com.example.productapi.domain.repository.ProductRepository;
 import lombok.AccessLevel;
@@ -12,6 +16,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
 import org.springframework.data.domain.*;
+import org.springframework.data.jpa.domain.Specification;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -34,14 +39,17 @@ class ProductApplicationServiceTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        mapper = new ProductMapper();
+        CategoryMapper categoryMapper = new CategoryMapper();
+        mapper = new ProductMapper(categoryMapper);
         service = new ProductApplicationService(repository, mapper);
     }
 
     // ----------------- CREATE -----------------
     @Test
     void shouldCreateProduct_givenValidProductDto_whenCreate() {
-        ProductDto dto = new ProductDto(null, "Laptop", BigDecimal.valueOf(1200), "Electronics", "High-end laptop", 10);
+        CategoryDto categoryDto = new CategoryDto("ELEC", "Electronics");
+        ProductDto dto = new ProductDto(null, "Laptop", BigDecimal.valueOf(1200), categoryDto, "High-end laptop", 10);
+
         Product savedProduct = mapper.toEntity(dto);
         savedProduct.setId(1L);
 
@@ -51,8 +59,8 @@ class ProductApplicationServiceTest {
 
         assertThat(result)
                 .isNotNull()
-                .extracting(ProductDto::id, ProductDto::name, ProductDto::category, ProductDto::description, ProductDto::quantity)
-                .containsExactly(1L, "Laptop", "Electronics", "High-end laptop", 10);
+                .extracting(ProductDto::id, ProductDto::name, p -> p.category().code(), p -> p.category().name(), ProductDto::description, ProductDto::quantity)
+                .containsExactly(1L, "Laptop", "ELEC", "Electronics", "High-end laptop", 10);
 
         verify(repository, times(1)).save(any(Product.class));
     }
@@ -60,19 +68,17 @@ class ProductApplicationServiceTest {
     // ----------------- FIND BY ID -----------------
     @Test
     void shouldReturnProductDto_givenExistingId_whenFindById() {
-        Product product = new Product("TV", BigDecimal.valueOf(500));
+        Category category = Category.builder().code("ELEC").name("Electronics").build();
+        Product product = new Product("TV", BigDecimal.valueOf(500), category, "LED TV", 3);
         product.setId(1L);
-        product.setCategory("Electronics");
-        product.setDescription("LED TV");
-        product.setQuantity(3);
 
         when(repository.findById(1L)).thenReturn(Optional.of(product));
 
         ProductDto result = service.findById(1L);
 
         assertThat(result)
-                .extracting(ProductDto::id, ProductDto::name, ProductDto::category, ProductDto::description, ProductDto::quantity)
-                .containsExactly(1L, "TV", "Electronics", "LED TV", 3);
+                .extracting(ProductDto::id, ProductDto::name, p -> p.category().code(), p -> p.category().name(), ProductDto::description, ProductDto::quantity)
+                .containsExactly(1L, "TV", "ELEC", "Electronics", "LED TV", 3);
     }
 
     @Test
@@ -86,40 +92,40 @@ class ProductApplicationServiceTest {
     // ----------------- GET ALL -----------------
     @Test
     void shouldReturnPagedProductDto_givenProductsExist_whenGetAll() {
-        Product product1 = new Product("A", BigDecimal.valueOf(10));
-        product1.setCategory("Cat1");
-        product1.setDescription("Desc1");
-        product1.setQuantity(2);
+        Category cat1 = Category.builder().code("C1").name("Cat1").build();
+        Category cat2 = Category.builder().code("C2").name("Cat2").build();
 
-        Product product2 = new Product("B", BigDecimal.valueOf(20));
-        product2.setCategory("Cat2");
-        product2.setDescription("Desc2");
-        product2.setQuantity(5);
+        Product product1 = new Product("A", BigDecimal.valueOf(10), cat1, "Desc1", 2);
+        Product product2 = new Product("B", BigDecimal.valueOf(20), cat2, "Desc2", 5);
 
         Page<Product> page = new PageImpl<>(List.of(product1, product2));
-        when(repository.findAll(any(Pageable.class))).thenReturn(page);
 
-        Page<ProductDto> result = service.getAll(0, 2, "name", "ASC");
+        when(repository.findAll(any(Specification.class), any(Pageable.class))).thenReturn(page);
+
+        ProductQueryParams params = new ProductQueryParams(
+                0, 2, "name", "asc", null, null, List.of("C1","C2"), null
+        );
+
+        Page<ProductDto> result = service.getAll(params);
 
         assertThat(result.getContent())
                 .hasSize(2)
-                .extracting(ProductDto::name, ProductDto::category)
+                .extracting(ProductDto::name, p -> p.category().code())
                 .containsExactly(
-                        tuple("A", "Cat1"),
-                        tuple("B", "Cat2")
+                        tuple("A", "C1"),
+                        tuple("B", "C2")
                 );
     }
 
     // ----------------- UPDATE -----------------
     @Test
     void shouldUpdateProduct_givenExistingIdAndValidDto_whenUpdate() {
-        Product existing = new Product("Old", BigDecimal.valueOf(50));
+        Category existingCat = Category.builder().code("OLD").name("OldCat").build();
+        Product existing = new Product("Old", BigDecimal.valueOf(50), existingCat, "OldDesc", 2);
         existing.setId(1L);
-        existing.setCategory("OldCat");
-        existing.setDescription("OldDesc");
-        existing.setQuantity(2);
 
-        ProductDto updateDto = new ProductDto(null, "New", BigDecimal.valueOf(100), "NewCat", "UpdatedDesc", 7);
+        CategoryDto newCatDto = new CategoryDto("NEW", "NewCat");
+        ProductDto updateDto = new ProductDto(null, "New", BigDecimal.valueOf(100), newCatDto, "UpdatedDesc", 7);
 
         when(repository.findById(1L)).thenReturn(Optional.of(existing));
         when(repository.save(existing)).thenReturn(mapper.toEntity(updateDto));
@@ -127,16 +133,18 @@ class ProductApplicationServiceTest {
         ProductDto result = service.update(1L, updateDto);
 
         assertThat(result)
-                .extracting(ProductDto::name, ProductDto::price, ProductDto::category, ProductDto::description, ProductDto::quantity)
-                .containsExactly("New", BigDecimal.valueOf(100), "NewCat", "UpdatedDesc", 7);
+                .extracting(ProductDto::name, ProductDto::price, p -> p.category().code(), p -> p.category().name(), ProductDto::description, ProductDto::quantity)
+                .containsExactly("New", BigDecimal.valueOf(100), "NEW", "NewCat", "UpdatedDesc", 7);
     }
 
     @Test
     void shouldThrowProductNotFoundException_givenNonExistingId_whenUpdate() {
-        ProductDto dto = new ProductDto(null, "New", BigDecimal.valueOf(100), "Cat", "Desc", 3);
+        CategoryDto dto = new CategoryDto("NEW", "NewCat");
+        ProductDto productDto = new ProductDto(null, "New", BigDecimal.valueOf(100), dto, "UpdatedDesc", 12);
+
         when(repository.findById(1L)).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> service.update(1L, dto))
+        assertThatThrownBy(() -> service.update(1L, productDto))
                 .isInstanceOf(ProductNotFoundException.class);
     }
 
@@ -165,3 +173,4 @@ class ProductApplicationServiceTest {
         verify(repository, never()).deleteById(1L);
     }
 }
+

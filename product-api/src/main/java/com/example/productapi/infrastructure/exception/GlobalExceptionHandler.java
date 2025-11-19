@@ -1,9 +1,9 @@
 package com.example.productapi.infrastructure.exception;
 
 import com.example.productapi.application.exception.InvalidProductException;
+import com.example.productapi.domain.exception.CategoryNotFoundException;
 import com.example.productapi.domain.exception.ProductNotFoundException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -28,7 +28,7 @@ public class GlobalExceptionHandler {
 
     // --- Custom exceptions ---
 
-    @ExceptionHandler(ProductNotFoundException.class)
+    @ExceptionHandler({ ProductNotFoundException.class, CategoryNotFoundException.class })
     public ResponseEntity<ApiError> handleNotFound(ProductNotFoundException ex, HttpServletRequest req) {
         log.error("Not found at {}: {}", req.getRequestURI(), ex.getMessage(), ex);
         return ResponseEntity.status(HttpStatus.NOT_FOUND)

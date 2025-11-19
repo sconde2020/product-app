@@ -3,6 +3,7 @@ package com.example.productapi.domain.repository;
 import com.example.productapi.domain.model.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 
 import java.util.Optional;
 
@@ -14,6 +15,6 @@ public interface ProductRepository {
 
     void deleteById(Long id);
 
-    Page<Product> findAll(Pageable pageable);
+    Page<Product> findAll(Specification<Product> specification, Pageable pageable);
 
 }

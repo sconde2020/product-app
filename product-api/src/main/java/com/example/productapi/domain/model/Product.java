@@ -9,11 +9,9 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "products")
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter @Setter @Builder
+@ToString(exclude = "category")
+@NoArgsConstructor @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Product {
 
@@ -27,8 +25,9 @@ public class Product {
     @Column(nullable = false)
     BigDecimal price;
 
-    @Column(nullable = false, length = 50)
-    String category;
+    @ManyToOne
+    @JoinColumn(name = "category_code")
+    Category category;
 
     @Column(nullable = false, length = 1000)
     String description;
@@ -41,7 +40,7 @@ public class Product {
         this.price = price;
     }
 
-    public Product(String name, BigDecimal price, String category, String description, Integer quantity) {
+    public Product(String name, BigDecimal price, Category category, String description, Integer quantity) {
         this.name = name;
         this.price = price;
         this.category = category;
