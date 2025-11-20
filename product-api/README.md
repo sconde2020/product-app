@@ -1,103 +1,122 @@
-# Product Catalog Application (`product-app`)
+# Product API
 
-**A full-stack product catalog application** designed for managing products and categories, supporting CRUD operations, advanced filtering and sorting, data exports, and secured via Spring Security with JWT authentication.
+## Overview
 
-This project demonstrates **end-to-end development skills**, including backend API design, frontend SPA implementation, database design, security, and containerized deployment — ideal for showcasing capabilities as a **Tech Lead or Senior Developer**.
+This service exposes two endpoint groups:
 
----
+- /api/products — full CRUD for products; listing supports pagination, sorting and filtering.
+- /api/categories — simple CRUD for categories.
 
-## Architecture
+All endpoints consume and produce JSON.
 
-The application is split into two main components:
+Base paths:
 
-### **Frontend**
+- Products: /api/products
+- Categories: /api/categories
 
-- **Name:** `product-web`
-- **Description:** A modern, single-page web application (SPA) that consumes the backend API.
-- **Responsibilities:**
-    - Display and manage products and categories
-    - Support sorting, filtering, and exporting of lists
-    - Responsive UI with PrimeNG components
-- **Location:** `product-web/` (see its README for build/run details)
+## Endpoints (brief)
 
-### **Backend**
+### Products
 
-- **Name:** `product-api`
-- **Description:** RESTful backend service handling all business logic and data access.
-- **Responsibilities:**
-    - CRUD operations for products and categories
-    - Sorting, filtering, and exporting data
-    - Security layer with **Spring Security** and **JWT authentication**
-    - Database persistence via **PostgreSQL**
-- **Location:** `product-api/` (see its README for build/run details)
+#### List products
 
----
+- Method: **GET /api/products**
+- Description: Returns a paginated list of products. Supports query parameters:
+  - Pagination: page, size
+  - Sorting: sort (e.g. name,price), direction (asc|desc)
+  - Filtering: common filters such as name, category, minPrice, maxPrice (server-defined)
+- Typical response: **200 OK** with paginated wrapper (content, totalElements, totalPages, etc.)
 
-## Database
+#### Get product
 
-- **Type:** PostgreSQL
-- **Version:** 16.10
-- **Purpose:** Stores all product and category data for the backend API
-- **Features:** Schema initialization and migrations, support for relational queries, sorting, and filtering
+- Method: **GET /api/products/{id}**
+- Description: Returns a single product by id.
+- Responses: **200 OK** (product), **404 Not Found**
 
----
+#### Create product
 
-## Features
+- Method: **POST /api/products**
+- Description: Creates a new product. Body fields typically include name, description, price, currency, category, stock.
+- Responses: **201 Created** (created product), **400 Bad Request** (validation)
 
-- **Product & Category Management:** Full CRUD operations
-- **Advanced List Operations:** Sorting, filtering, and data export (CSV/Excel)
-- **Security:** Role-based authentication and authorization with Spring Security and JWT
-- **Responsive UI:** Intuitive SPA with Angular 19 and PrimeNG
-- **Containerized Deployment:** Docker images for frontend, backend, and database
-- **Orchestration:** Kubernetes-ready for scalable deployments
-- **Extensible Architecture:** Designed for adding new modules, services, and microservices
+#### Update (replace) product
 
----
+- Method: **PUT /api/products/{id}**
+- Description: Replaces the product record with the provided full payload.
+- Responses: **200 OK** (updated product), **400 Bad Request**, **404 Not Found**
 
-## Technologies
+#### Delete product
 
-- **Frontend:** Angular 19, PrimeNG
-- **Backend:** Java 21, Spring Boot 3
-- **Database:** PostgreSQL 16.10
-- **Build Tools:** Maven (backend), npm (frontend)
-- **Containerization:** Docker
-- **Orchestration:** Kubernetes
+- Method: **DELETE /api/products/{id}**
+- Description: Deletes the specified product.
+- Responses: **204 No Content, 404 Not Found**
 
----
+### Categories
 
-## Quick Start
+#### List categories
 
-1. **Start the backend**: follow [product-api/README.md](product-api/README.md).
-2. **Start the frontend**: follow [product-web/README.md](product-web/README.md).
-3. **Verify:** Open the frontend in a browser and ensure it connects to the backend.
+- Method: **GET /api/categories**
+- Description: Returns the list of categories (usually id, name, description). May be paginated depending on server config.
+- Responses: **200 OK**
 
----
+#### Create category
 
-## Screenshots / Demo
+- Method: **POST /api/categories**
+- Description: Creates a new category. Body typically includes name and optional description.
+- Responses: **201 Created, 400 Bad Request**
 
-### **Frontend Dashboard**
-![Frontend Dashboard](docs/screenshots/frontend-dashboard.png)
+#### Update (replace) category
 
-### **Product List with Filtering and Sorting**
-![Product List](docs/screenshots/product-list.png)
+- Method: **PUT /api/categories/{id}**
+- Description: Replaces the category record.
+- Responses: **200 OK, 400 Bad Request, 404 Not Found**
 
-### **Category Management**
-![Category Management](docs/screenshots/category-management.png)
+#### Delete category
 
-### **Architecture Diagram**
-![Architecture Diagram](docs/screenshots/architecture-diagram.png)
+- Method: **DELETE /api/categories/{id}**
+- Description: Deletes the specified category.
+- Responses: **204 No Content, 404 Not Found**
 
-> Replace the image paths above with your actual screenshots or diagrams. Place them in a `docs/screenshots/` folder in your repo for best practice.
+## Common error responses
+
+- 400 Bad Request — validation / malformed request
+- 404 Not Found — resource missing
+- 500 Internal Server Error — unexpected server error
+
+Use the swagger/OpenAPI UI for full schemas, request/response examples and interactive testing.
 
 ---
 
-## Portfolio Highlights
+## Development commands
 
-This project demonstrates:
+```bash
+  SERVER_PORT=8090 mvn spring-boot:run -Dspring-boot.run.profiles=dev
+```
 
-- End-to-end full-stack development
-- Clean and maintainable architecture
-- Security best practices (JWT, Spring Security)
-- Containerization and orchestration readiness
-- Advanced UI features for enterprise-grade applications
-- Experience in leading design and implementation decisions  
+**Access to swagger**
+
+http://localhost:8090/swagger-ui.html
+
+---
+
+## Containerization with Docker
+
+**Generate image**
+
+```bash
+  docker build -t product-api:latest .
+```
+
+**Run the container**
+
+```bash
+  docker run --name product-api-container:latest \
+    --add-host=host.docker.internal:host-gateway \
+    -e SPRING_PROFILES_ACTIVE=docker \
+    -p 8092:8091 \
+    product-api:latest
+```
+
+**Access to swagger**
+
+Go to http://localhost:8092/swagger-ui.html
