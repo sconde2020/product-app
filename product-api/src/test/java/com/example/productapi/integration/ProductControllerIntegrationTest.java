@@ -11,6 +11,7 @@ import com.example.productapi.infrastructure.repository.JpaProductRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -42,8 +44,29 @@ class ProductControllerIntegrationTest {
     @Autowired
     ObjectMapper objectMapper;
 
+    CategoryDto testCategoryDto;
+    List<Category> testCategories;
+
     @BeforeEach
     void setup() {
+        testCategoryDto = new CategoryDto("COMP", "Computers");
+        categoryRepository.save(
+                Category.builder()
+                        .code(testCategoryDto.code())
+                        .name(testCategoryDto.name())
+                        .build()
+        );
+
+        Category category1 = Category.builder().code("ELEC").name("Electronics").build();
+        Category category2 = Category.builder().code("MISC").name("Miscellaneous").build();
+        Category category3 = Category.builder().code("ACC").name("Accessories").build();
+        Category category4 = Category.builder().code("OFF").name("Office").build();
+        testCategories = List.of(category1, category2, category3, category4);
+        testCategories.forEach(category -> categoryRepository.save(category));
+    }
+
+    @AfterEach
+    void clean() {
         ((JpaProductRepository) repository).deleteAll();
         ((JpaCategoryRepository) categoryRepository).deleteAll();
     }
@@ -51,19 +74,11 @@ class ProductControllerIntegrationTest {
     // ----------------- CREATE -----------------
     @Test
     void shouldCreateProduct_givenValidDto_whenPostProduct() throws Exception {
-        CategoryDto categoryDto = new CategoryDto("COMPUTERS", "Computers");
-        categoryRepository.save(
-                Category.builder()
-                        .code(categoryDto.code())
-                        .name(categoryDto.name())
-                        .build()
-        );
-
         ProductDto dto = new ProductDto(
                 null,
                 "Laptop Pro",
                 BigDecimal.valueOf(1200),
-                categoryDto,
+                testCategoryDto,
                 "High-end laptop for professionals",
                 10
         );
@@ -75,7 +90,7 @@ class ProductControllerIntegrationTest {
                 .andExpect(jsonPath("$.id").exists())
                 .andExpect(jsonPath("$.name").value("Laptop Pro"))
                 .andExpect(jsonPath("$.price").value(1200))
-                .andExpect(jsonPath("$.category.code").value("COMPUTERS"))
+                .andExpect(jsonPath("$.category.code").value("COMP"))
                 .andExpect(jsonPath("$.category.name").value("Computers"))
                 .andExpect(jsonPath("$.description").value("High-end laptop for professionals"))
                 .andExpect(jsonPath("$.quantity").value(10));
@@ -101,8 +116,7 @@ class ProductControllerIntegrationTest {
     // ----------------- GET BY ID -----------------
     @Test
     void shouldReturnProductDto_givenExistingId_whenGetProduct() throws Exception {
-        Category category = Category.builder().code("ELEC").name("Electronics").build();
-        categoryRepository.save(category);
+        Category category = testCategories.get(0);
 
         Product product = repository.save(new Product(
                 null,
@@ -133,8 +147,7 @@ class ProductControllerIntegrationTest {
     // ----------------- GET ALL WITH PAGINATION + FILTERS -----------------
     @Test
     void shouldReturnPagedProducts_givenProductsExist_whenGetAll() throws Exception {
-        Category category = Category.builder().code("MISC").name("Misc").build();
-        categoryRepository.save(category);
+        Category category = testCategories.get(1);
         repository.save(new Product(null, "A", BigDecimal.valueOf(10), category, "Cheap item", 15));
         repository.save(new Product(null, "B", BigDecimal.valueOf(20), category, "More expensive item", 10));
 
@@ -153,8 +166,7 @@ class ProductControllerIntegrationTest {
     // ----------------- UPDATE -----------------
     @Test
     void shouldUpdateProduct_givenExistingId_whenPutProduct() throws Exception {
-        Category category = Category.builder().code("ACC").name("Accessories").build();
-        categoryRepository.save(category);
+        Category category = testCategories.get(2);
         Product product = repository.save(new Product(
                 null,
                 "Old",
@@ -205,8 +217,7 @@ class ProductControllerIntegrationTest {
     // ----------------- DELETE -----------------
     @Test
     void shouldDeleteProduct_givenExistingId_whenDeleteProduct() throws Exception {
-        Category category = Category.builder().code("OFF").name("Office").build();
-        categoryRepository.save(category);
+        Category category = testCategories.get(3);
         Product product = repository.save(new Product(
                 null,
                 "Item",

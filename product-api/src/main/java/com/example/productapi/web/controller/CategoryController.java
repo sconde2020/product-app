@@ -18,7 +18,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/categories")
-@Tag(name = "Categories", description = "CRUD operations for categories")
+@Tag(name = "Categories", description = "Crate, Read, Update, Delete operations for categories")
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class CategoryController {
@@ -38,11 +38,23 @@ public class CategoryController {
                 .body(created);
     }
 
-    @Operation(summary = "List all categories")
+    @Operation(summary = "Read all categories")
     @ApiResponse(responseCode = "200", description = "Categories retrieved successfully")
     @GetMapping
-    public ResponseEntity<List<CategoryDto>> list() {
+    public ResponseEntity<List<CategoryDto>> readAll() {
         return ResponseEntity.ok(service.getAll());
+    }
+
+    @Operation(summary = "Update a category")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Category updated successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid category input"),
+            @ApiResponse(responseCode = "404", description = "Category not found")
+    })
+    @PutMapping("/{code}")
+    public ResponseEntity<CategoryDto> update(@PathVariable String code, @RequestBody @Valid CategoryDto dto) {
+        CategoryDto updated = service.update(code, dto);
+        return ResponseEntity.ok(updated);
     }
 
     @Operation(summary = "Delete a category")

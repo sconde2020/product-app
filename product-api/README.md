@@ -2,45 +2,88 @@
 
 ## Overview
 
-The Product API provides CRUD operations for products with support for pagination, sorting and filtering.
+This service exposes two endpoint groups:
 
-Base path: /api/products. JSON request/response bodies.
+- /api/products — full CRUD for products; listing supports pagination, sorting and filtering.
+- /api/categories — simple CRUD for categories.
+
+All endpoints consume and produce JSON.
+
+Base paths:
+
+- Products: /api/products
+- Categories: /api/categories
 
 ## Endpoints (brief)
 
-### List products
+### Products
 
-- Method: GET /api/products
-- What it does: Returns a paginated list of products. Supports query params: page, size, direction
-- Typical response: 200 OK with paginated wrapper (content, totalElements, totalPages, etc.)
+#### List products
 
-### Get product
+- Method: **GET /api/products**
+- Description: Returns a paginated list of products. Supports query parameters:
+  - Pagination: page, size
+  - Sorting: sort (e.g. name,price), direction (asc|desc)
+  - Filtering: common filters such as name, category, minPrice, maxPrice (server-defined)
+- Typical response: **200 OK** with paginated wrapper (content, totalElements, totalPages, etc.)
 
-- Method: GET /api/products/{id}
-- What it does: Returns a single product by id.
-- Typical responses: 200 OK (product), 404 Not Found
+#### Get product
 
-### Create product
+- Method: **GET /api/products/{id}**
+- Description: Returns a single product by id.
+- Responses: **200 OK** (product), **404 Not Found**
 
-- Method: POST /api/products
-- What it does: Creates a new product. Body includes name, description, price, currency, category, stock.
-- Typical responses: 201 Created (created product), 400 Bad Request (validation)
+#### Create product
 
-### Update (replace)
+- Method: **POST /api/products**
+- Description: Creates a new product. Body fields typically include name, description, price, currency, category, stock.
+- Responses: **201 Created** (created product), **400 Bad Request** (validation)
 
-- Method: PUT /api/products/{id}
-- What it does: Replaces a product record with the provided full payload.
-- Typical responses: 200 OK (updated product), 400 Bad Request, 404 Not Found
+#### Update (replace) product
 
-### Delete product
+- Method: **PUT /api/products/{id}**
+- Description: Replaces the product record with the provided full payload.
+- Responses: **200 OK** (updated product), **400 Bad Request**, **404 Not Found**
 
-- Method: DELETE /api/products/{id}
-- What it does: Deletes the specified product.
-- Typical responses: 204 No Content, 404 Not Found
+#### Delete product
 
-Error responses (common): 400 Bad Request (validation/malformed), 404 Not Found, 409 Conflict (duplicates/business rules), 500 Internal Server Error.
+- Method: **DELETE /api/products/{id}**
+- Description: Deletes the specified product.
+- Responses: **204 No Content, 404 Not Found**
 
-Use the swagger/OpenAPI UI for full schema, examples and interactive testing.
+### Categories
+
+#### List categories
+
+- Method: **GET /api/categories**
+- Description: Returns the list of categories (usually id, name, description). May be paginated depending on server config.
+- Responses: **200 OK**
+
+#### Create category
+
+- Method: **POST /api/categories**
+- Description: Creates a new category. Body typically includes name and optional description.
+- Responses: **201 Created, 400 Bad Request**
+
+#### Update (replace) category
+
+- Method: **PUT /api/categories/{id}**
+- Description: Replaces the category record.
+- Responses: **200 OK, 400 Bad Request, 404 Not Found**
+
+#### Delete category
+
+- Method: **DELETE /api/categories/{id}**
+- Description: Deletes the specified category.
+- Responses: **204 No Content, 404 Not Found**
+
+## Common error responses
+
+- 400 Bad Request — validation / malformed request
+- 404 Not Found — resource missing
+- 500 Internal Server Error — unexpected server error
+
+Use the swagger/OpenAPI UI for full schemas, request/response examples and interactive testing.
 
 ---
 

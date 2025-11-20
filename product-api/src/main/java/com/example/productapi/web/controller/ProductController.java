@@ -21,7 +21,7 @@ import java.net.URI;
 
 @RestController
 @RequestMapping("/api/products")
-@Tag(name = "Products", description = "CRUD operations for products")
+@Tag(name = "Products", description = "Crate, Read, Update, Delete operations for products")
 @EnableSpringDataWebSupport(pageSerializationMode = EnableSpringDataWebSupport.PageSerializationMode.VIA_DTO)
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -42,22 +42,21 @@ public class ProductController {
                 .body(created);
     }
 
-    @Operation(summary = "Get a product by ID")
+    @Operation(summary = "Read a product by ID")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Product found"),
             @ApiResponse(responseCode = "404", description = "Product not found")
     })
     @GetMapping("/{id}")
-    public ResponseEntity<ProductDto> get(@PathVariable Long id) {
+    public ResponseEntity<ProductDto> read(@PathVariable Long id) {
         ProductDto product = service.findById(id);
         return ResponseEntity.ok(product);
     }
 
-    @Operation(summary = "List all products with pagination, filters and sorting")
+    @Operation(summary = "Read all products with pagination, filters and sorting")
     @ApiResponse(responseCode = "200", description = "Product retrieved successfully")
     @GetMapping
-    public ResponseEntity<Page<ProductDto>> list(@ParameterObject ProductQueryParams queryParams
-    ) {
+    public ResponseEntity<Page<ProductDto>> readAll(@ParameterObject ProductQueryParams queryParams) {
         Page<ProductDto> result = service.getAll(queryParams);
         return ResponseEntity.ok(result);
     }

@@ -29,14 +29,14 @@ public class GlobalExceptionHandler {
     // --- Custom exceptions ---
 
     @ExceptionHandler({ ProductNotFoundException.class, CategoryNotFoundException.class })
-    public ResponseEntity<ApiError> handleNotFound(ProductNotFoundException ex, HttpServletRequest req) {
+    public ResponseEntity<ApiError> handleNotFound(RuntimeException ex, HttpServletRequest req) {
         log.error("Not found at {}: {}", req.getRequestURI(), ex.getMessage(), ex);
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(ApiError.of(404, ex.getMessage(), req.getRequestURI()));
     }
 
     @ExceptionHandler(InvalidProductException.class)
-    public ResponseEntity<ApiError> handleInvalidProduct(InvalidProductException ex, HttpServletRequest req) {
+    public ResponseEntity<ApiError> handleInvalidProduct(RuntimeException ex, HttpServletRequest req) {
         log.error("Invalid product at {}: {}", req.getRequestURI(), ex.getMessage(), ex);
         String msg = "Invalid product data. Verify product details.";
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)

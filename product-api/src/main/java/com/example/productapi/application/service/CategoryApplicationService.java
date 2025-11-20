@@ -29,9 +29,23 @@ public class CategoryApplicationService {
         return repository.findAllByOrderByNameAsc().stream().map(mapper::toDto).toList();
     }
 
-    public void delete(String code) {
-        Category category = repository.findById(code)
+    public CategoryDto update(String code, CategoryDto dto) {
+        Category existing = repository.findById(code)
                 .orElseThrow(() -> new CategoryNotFoundException(code));
-        repository.delete(category);
+
+        Category newCategory = mapper.toEntity(dto);
+        newCategory.setCode(existing.getCode());
+
+        Category updated = repository.save(newCategory);
+
+        return mapper.toDto(updated);
     }
+
+    public void delete(String code) {
+        if (repository.findById(code).isEmpty()) {
+            throw new CategoryNotFoundException(code);
+        }
+        repository.deleteById(code);
+    }
+
 }

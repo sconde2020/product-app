@@ -11,7 +11,7 @@ public interface CategoryRepository {
 
     List<Category> findAllByOrderByNameAsc();
 
-    void delete(Category category);
-
     Optional<Category> findById(String code);
+
+    void deleteById(String code);
 }
